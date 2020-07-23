@@ -1,0 +1,30 @@
+@import "../../styles/allutils";
+
+.audiocanvas {
+    &__container {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+
+input[type="range"] {
+    vertical-align: middle;
+    margin: 20px;
+    -webkit-appearance: none;
+    background-color: #c2edf2;
+    height: 3px;
+    width: 100px;
+    outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: #c2edf2;
+    width: 14px;
+    height: 20px;
+    border: 2px solid #73b8bf;
+    border-radius: 2px;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+    cursor: pointer;
+}

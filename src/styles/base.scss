@@ -1,0 +1,27 @@
+@import './allutils';
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'lato';
+    font-weight: 400;
+    color: $DARK;
+
+    & > a {
+        text-decoration-line: none;
+
+        &:visited, &:active {
+            color: $DARK;
+        }
+    }
+}
+
+::after {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+::before {
+    margin: 0;
+    box-sizing: border-box;
+}

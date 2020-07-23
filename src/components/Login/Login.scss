@@ -1,0 +1,53 @@
+@import "../../styles/allutils";
+
+.login {
+    &__container {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        background-color: $LIGHT;
+    }
+
+    &__signin-group {
+        min-width: 18rem;
+        min-height: 25rem;
+        border: 1px solid $DARK;
+        border-radius: 0.5rem;
+        background-color: $DARK;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: space-around;
+        padding: 2rem;
+    }
+
+    &__logo {
+        width: 15rem;
+        height: auto;
+    }
+
+    &__button-img {
+        width: auto;
+        height: 100%;
+    }
+
+    &__button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.2rem 0.75rem 0.2rem 0.2rem;
+        height: 2rem;
+        min-width: 12rem;
+        background-color: $RED;
+        border-radius: 1rem;
+        border: none;
+
+        span {
+            width: 100%;
+            text-align: center;
+            color: $LIGHT;
+        }
+    }
+}

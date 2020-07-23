@@ -1,0 +1,18 @@
+@import "../../styles/allutils";
+
+.frequencydisplay {
+    &__container {
+        position: absolute;
+        right: 20px;
+        top: 0;
+        background-color: #c2edf2;
+        color: #73b8bf;
+        height: 40px;
+        width: 40px;
+        text-align: center;
+        line-height: 40px;
+        font-size: 20;
+        font-weight: 200;
+        border-radius: 2px;
+    }
+}
