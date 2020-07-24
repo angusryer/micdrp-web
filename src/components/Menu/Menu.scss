@@ -1,0 +1,57 @@
+@import '../../styles/allutils';
+
+.menu {
+    &__container {
+        display: flex;
+        flex-flow: column nowrap;
+        position: absolute;
+        justify-content: center;
+        top: 3rem;
+        right: 3rem;
+        height: 6rem;
+        width: 6rem;
+        background-color: $LIGHT;
+        border: none;
+        border-radius: 0.3rem;
+    }
+
+    &__list {
+        display: flex;
+        flex-flow: column nowrap;
+        padding: 0;
+        align-self: center;
+    }
+
+    &__item {
+        cursor: pointer;
+        list-style: none;
+        padding: 0.25rem 0;
+        margin: 0;
+        text-align: center;
+        
+        &:hover {
+            border-radius: 0.3rem;
+            animation: fadein 0.1s linear forwards;
+        }
+    }
+}
+
+@keyframes fadein {
+    0% {
+        width: 6rem;
+        background-color: $GREY;
+        font-weight: 400;
+    }
+
+    33%   {
+        background-color: $ORANGE;
+        font-weight: 500;
+        width: 6rem;
+    }
+
+    100%   {
+        background-color: $ORANGE;
+        font-weight: 600;
+        width: 7rem;
+    }
+}

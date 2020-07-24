@@ -1,13 +1,13 @@
-import React from 'react';
-import firebase from '../../config/firebase';
+import React, { useState } from 'react';
 import './Nav.scss';
+import { Menu } from '../';
 
-function Nav({ user }) {
+function Nav({ user, currentPage }) {
 
-    const signOut = () => {
-        firebase.auth().signOut().catch(error => {
-            alert("Unable to sign you out! Try again! Here's the error we received: \n", error)
-        })
+    const [showMenu, setShowMenu] = useState(false);
+
+    const toggleMenu = () => {
+        setShowMenu(!showMenu);
     }
 
     return (
@@ -17,8 +17,9 @@ function Nav({ user }) {
             </div>
             <div className="nav__user-group">
                 <div className="nav__user-name">{user.name}</div>
-                <div className="nav__logout" onClick={signOut}>
+                <div className="nav__logout" onClick={() => toggleMenu()}>
                     <img src={user.avatar} alt={user.name} className="nav__avatar" />
+                    <Menu isVisible={showMenu} currentPage={currentPage} />
                 </div>
             </div>
         </nav>

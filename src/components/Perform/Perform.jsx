@@ -20,210 +20,207 @@ function Perform({user, setUser}) {
           })
     }, [])
 
-    // <input class="zoom" type="range" min="1" max="5" step="1" value="2" />
-    // <div class="pitch"></div>
-    // <div class="freq"></div>
-    // <canvas width="640" height="480"></canvas>
-
-
-
-    const getUserPermissions = () => {
-        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia; // Get permissions
-    }
-
-    getUserPermissions();
-
-
-    const audioContext = new window.AudioContext();
-    const compressor = audioContext.createDynamicsCompressor();
-    const analyser = audioContext.createAnalyser();
-
-
-    const canvas = document.querySelector('canvas'); // HTML canvas component
-    canvas.width = document.body.clientWidth; // Canvas style
-    canvas.height = document.body.clientHeight; // Canvas style
-
-    let samples = 256;
-    const zoom = document.querySelector('.zoom'); // Zoom component
-
-
-
-
-    // Save below in state, or discard altogether
-    zoom.onchange = function () {
-        switch (this.value) { // what is this supposed to be?
-            case '1': samples = 128; break;
-            case '2': samples = 256; break;
-            case '3': samples = 512; break;
-            case '4': samples = 1024; break;
-            case '5': samples = 2048; break;
-            default: samples = 256;
-        }
-        return console.log(samples);
-    };
-
-
-
-    const pitchDisplay = document.querySelector('.pitch');  // Pitch component
-    const freq = document.querySelector('.freq'); // Frequency component
-
-    const minSamples = 0;
-    const buf = new Float32Array(1024);
-
-
-
-
-
-    const getPitch = function (buffer) {
-        const size = buffer.length;
-        const maxSamples = Math.floor(size / 2);
-        let bestOffset = -1;
-        let bestCorrelation = 0;
-        let rms = 0;
-        let foundGoodCorrelation = false;
-        const correlations = [];
-
-        let i = 0;
-        while (i < size) {
-            const val = buffer[i];
-            rms += val * val;
-            i++;
-        }
-
-        rms = Math.sqrt(rms / size);
-
-        // not enough signal
-        if (rms < 0.01) { return "-"; }
-
-        let lastCorrelation = 1;
-
-        let offset = minSamples;
-        while (offset < maxSamples) {
-            let correlation = 0;
-
-            i = 0;
-            while (i < maxSamples) {
-                correlation += Math.abs(buffer[i] - buffer[i + offset]);
-                i++;
-            }
-
-            correlation = 1 - (correlation / maxSamples);
-            correlations[offset] = correlation;
-
-            if ((correlation > 0.9) && (correlation > lastCorrelation)) {
-                foundGoodCorrelation = true;
-                if (correlation > bestCorrelation) {
-                    bestCorrelation = correlation;
-                    bestOffset = offset;
-                }
-            } else if (foundGoodCorrelation) {
-                const shift = (correlations[bestOffset + 1] - correlations[bestOffset - 1]) / correlations[bestOffset];
-                return audioContext.sampleRate / (bestOffset + (8 * shift));
-            }
-
-            lastCorrelation = correlation;
-            offset++;
-        }
-
-        if (bestCorrelation > 0.01) { return audioContext.sampleRate / bestOffset; }
-        // no good match
-        return -1;
-    };
-
-
-
-
-
-
-    const noteFromPitch = function (frequency) {
-        const noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-        let noteNum = 12 * (Math.log(frequency / 440) / Math.log(2));
-        noteNum = Math.round(noteNum) + 69;
-        return noteStrings[noteNum % 12];
-    };
-
-
-
-    // doesn't seem to be used??
-    //
-    // const normalize = function (num) {
-    //     const multiplier = Math.pow(10, 2);
-    //     return Math.round(num * multiplier) / multiplier;
-    // };
-
-
-
-
-    const updatePitch = function () {
-
-        analyser.getFloatTimeDomainData(buf);
-        const pitch = getPitch(buf);
-
-        if (pitch > 0) { pitchDisplay.innerHTML = noteFromPitch(pitch); }
-        return freq.innerHTML = pitch;
-    };
-
-
-
-
-
-    const visualize = function () {
-        const normalize = (y, h) => (y / 256) * h;
-        const w = canvas.width;
-        const h = canvas.height;
-        const points = new Uint8Array(samples);
-        analyser.getByteTimeDomainData(points);
-
-        const drawContext = canvas.getContext('2d');
-        drawContext.clearRect(0, 0, w, h);
-
-        drawContext.strokeStyle = '#C2EDF2';
-        drawContext.lineWidth = 3;
-        drawContext.lineCap = 'butt';
-        drawContext.lineJoin = 'miter';
-        drawContext.beginPath();
-        drawContext.moveTo(0, normalize(points[0], h));
-
-        let i = 0;
-        while (i < points.length) {
-            drawContext.lineTo((w * (i + 1)) / points.length,
-                normalize(points[i], h));
-            i++;
-        }
-
-        return drawContext.stroke();
-    };
-
-
-
-
-    var animationLoop = function () {
-        visualize();
-        updatePitch();
-        return window.requestAnimationFrame(animationLoop);
-    };
-
-
-
-
-    navigator.getUserMedia(
-        { audio: true }, (stream) => {
-            const microphone = audioContext.createMediaStreamSource(stream);
-            microphone.connect(compressor);
-            compressor.connect(analyser);
-
-            return window.requestAnimationFrame(animationLoop);
-        }, e => console.log(`error: ${e}`));
-
-
-
-
-
     return (
         <div>
-            <Nav user={user} />
+            <Nav user={user} currentPage="perform" />
         </div>
     )
 }
 
 export default Perform
+
+
+//     // <input class="zoom" type="range" min="1" max="5" step="1" value="2" />
+//     // <div class="pitch"></div>
+//     // <div class="freq"></div>
+//     // <canvas width="640" height="480"></canvas>
+
+
+
+//     const getUserPermissions = () => {
+//         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia; // Get permissions
+//     }
+
+//     getUserPermissions();
+
+
+//     const audioContext = new window.AudioContext();
+//     const compressor = audioContext.createDynamicsCompressor();
+//     const analyser = audioContext.createAnalyser();
+
+
+//     const canvas = document.querySelector('canvas'); // HTML canvas component
+//     canvas.width = document.body.clientWidth; // Canvas style
+//     canvas.height = document.body.clientHeight; // Canvas style
+
+//     let samples = 256;
+//     const zoom = document.querySelector('.zoom'); // Zoom component
+
+
+
+
+//     // Save below in state, or discard altogether
+//     zoom.onchange = function () {
+//         switch (this.value) { // what is this supposed to be?
+//             case '1': samples = 128; break;
+//             case '2': samples = 256; break;
+//             case '3': samples = 512; break;
+//             case '4': samples = 1024; break;
+//             case '5': samples = 2048; break;
+//             default: samples = 256;
+//         }
+//         return console.log(samples);
+//     };
+
+
+
+//     const pitchDisplay = document.querySelector('.pitch');  // Pitch component
+//     const freq = document.querySelector('.freq'); // Frequency component
+
+//     const minSamples = 0;
+//     const buf = new Float32Array(1024);
+
+
+
+
+
+//     const getPitch = function (buffer) {
+//         const size = buffer.length;
+//         const maxSamples = Math.floor(size / 2);
+//         let bestOffset = -1;
+//         let bestCorrelation = 0;
+//         let rms = 0;
+//         let foundGoodCorrelation = false;
+//         const correlations = [];
+
+//         let i = 0;
+//         while (i < size) {
+//             const val = buffer[i];
+//             rms += val * val;
+//             i++;
+//         }
+
+//         rms = Math.sqrt(rms / size);
+
+//         // not enough signal
+//         if (rms < 0.01) { return "-"; }
+
+//         let lastCorrelation = 1;
+
+//         let offset = minSamples;
+//         while (offset < maxSamples) {
+//             let correlation = 0;
+
+//             i = 0;
+//             while (i < maxSamples) {
+//                 correlation += Math.abs(buffer[i] - buffer[i + offset]);
+//                 i++;
+//             }
+
+//             correlation = 1 - (correlation / maxSamples);
+//             correlations[offset] = correlation;
+
+//             if ((correlation > 0.9) && (correlation > lastCorrelation)) {
+//                 foundGoodCorrelation = true;
+//                 if (correlation > bestCorrelation) {
+//                     bestCorrelation = correlation;
+//                     bestOffset = offset;
+//                 }
+//             } else if (foundGoodCorrelation) {
+//                 const shift = (correlations[bestOffset + 1] - correlations[bestOffset - 1]) / correlations[bestOffset];
+//                 return audioContext.sampleRate / (bestOffset + (8 * shift));
+//             }
+
+//             lastCorrelation = correlation;
+//             offset++;
+//         }
+
+//         if (bestCorrelation > 0.01) { return audioContext.sampleRate / bestOffset; }
+//         // no good match
+//         return -1;
+//     };
+
+
+
+
+
+
+//     const noteFromPitch = function (frequency) {
+//         const noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+//         let noteNum = 12 * (Math.log(frequency / 440) / Math.log(2));
+//         noteNum = Math.round(noteNum) + 69;
+//         return noteStrings[noteNum % 12];
+//     };
+
+
+
+//     // doesn't seem to be used??
+//     //
+//     // const normalize = function (num) {
+//     //     const multiplier = Math.pow(10, 2);
+//     //     return Math.round(num * multiplier) / multiplier;
+//     // };
+
+
+
+
+//     const updatePitch = function () {
+
+//         analyser.getFloatTimeDomainData(buf);
+//         const pitch = getPitch(buf);
+
+//         if (pitch > 0) { pitchDisplay.innerHTML = noteFromPitch(pitch); }
+//         return freq.innerHTML = pitch;
+//     };
+
+
+
+
+
+//     const visualize = function () {
+//         const normalize = (y, h) => (y / 256) * h;
+//         const w = canvas.width;
+//         const h = canvas.height;
+//         const points = new Uint8Array(samples);
+//         analyser.getByteTimeDomainData(points);
+
+//         const drawContext = canvas.getContext('2d');
+//         drawContext.clearRect(0, 0, w, h);
+
+//         drawContext.strokeStyle = '#C2EDF2';
+//         drawContext.lineWidth = 3;
+//         drawContext.lineCap = 'butt';
+//         drawContext.lineJoin = 'miter';
+//         drawContext.beginPath();
+//         drawContext.moveTo(0, normalize(points[0], h));
+
+//         let i = 0;
+//         while (i < points.length) {
+//             drawContext.lineTo((w * (i + 1)) / points.length,
+//                 normalize(points[i], h));
+//             i++;
+//         }
+
+//         return drawContext.stroke();
+//     };
+
+
+
+
+//     var animationLoop = function () {
+//         visualize();
+//         updatePitch();
+//         return window.requestAnimationFrame(animationLoop);
+//     };
+
+
+
+
+//     navigator.getUserMedia(
+//         { audio: true }, (stream) => {
+//             const microphone = audioContext.createMediaStreamSource(stream);
+//             microphone.connect(compressor);
+//             compressor.connect(analyser);
+
+//             return window.requestAnimationFrame(animationLoop);
+//         }, e => console.log(`error: ${e}`));

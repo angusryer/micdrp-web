@@ -22,7 +22,7 @@ function Dashboard({user, setUser}) {
 
     return (
         <div>
-            <Nav user={user} />
+            <Nav user={user} currentPage="dash" />
             Welcome, {user.name}
         </div>
     )
