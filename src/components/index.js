@@ -1,4 +1,5 @@
 export { default as Splash } from './Splash/Splash';
+export { default as Loading } from './Loading/Loading';
 export { default as Perform } from './Perform/Perform';
 export { default as Login } from './Login/Login';
 export { default as Learn } from './Learn/Learn';

@@ -1,6 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import firebase from '../../config/firebase';
+import { Nav } from '../';
 
-function Perform(props) {
+function Perform({user, setUser}) {
+
+    const history = useHistory();
+
+    useEffect(() => {
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+              const userData = {
+                uid: user.uid,
+                name: user.displayName,
+                avatar: user.photoURL,
+              }
+              setUser(userData)
+            }
+          })
+    }, [])
 
     // <input class="zoom" type="range" min="1" max="5" step="1" value="2" />
     // <div class="pitch"></div>
@@ -203,7 +221,7 @@ function Perform(props) {
 
     return (
         <div>
-
+            <Nav user={user} />
         </div>
     )
 }

@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import firebase from '../../config/firebase';
 import { Nav } from '../';
 
-function Dashboard(props) {
+function Dashboard({user, setUser}) {
 
-    console.log(props);
+    const history = useHistory();
+
+    useEffect(() => {
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+              const userData = {
+                uid: user.uid,
+                name: user.displayName,
+                avatar: user.photoURL,
+              }
+              setUser(userData)
+            }
+          })
+    }, [])
 
     return (
         <div>
-            <Nav user={props.user} />
-            Welcome, {props.name}
+            <Nav user={user} />
+            Welcome, {user.name}
         </div>
     )
 }

@@ -1,43 +1,30 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import firebase from './config/firebase';
 import { Splash, Login, Learn, Dashboard, Perform } from './components';
 import './styles/base.scss';
 
 
-function App() {
+const App = () => {
 
-  const [user, setUser] = useState();
-
-  const setUserState = (user, setUser) => {
-    if (user) {
-      const userData = {
-        uid: user.uid,
-        name: user.displayName,
-        avatar: user.photoURL,
-        }
-      }
-      setUser(userData);
-    }
-  }
+  const [user, setUser] = useState({});
 
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <Splash setUserState={setUserState} />
+          <Splash setUser={setUser} />
         </Route>
         <Route path="/login">
-          <Login setUserState={setUserState} />
+          <Login setUser={setUser} />
         </Route>
         <Route path="/learn">
           <Learn />
         </Route>
-        <Route path="/:uid/dash">
-          <Dashboard user={user} />
+        <Route exact path="/dashboard/:uid">
+          <Dashboard user={user} setUser={setUser} />
         </Route>
-        <Route path="/:uid/perform">
-          <Perform user={user} />
+        <Route exact path="/perform/:uid">
+          <Perform user={user} setUser={setUser} />
         </Route>
       </Switch>
     </BrowserRouter>

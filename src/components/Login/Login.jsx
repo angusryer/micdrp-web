@@ -4,7 +4,7 @@ import './Login.scss';
 import googleEmblem from '../../assets/images/Google-01.png';
 import micdrpLogo from '../../assets/images/kid-bellowing.png'
 
-function Login(props) {
+function Login({ setUser }) {
 
     const signIn = () => {
         const provider = new firebase.auth.GoogleAuthProvider();
@@ -14,8 +14,7 @@ function Login(props) {
                 name: result.user.displayName,
                 avatar: result.user.photoURL,
             }
-            props.setUserState(user)
-            console.log("Login ", user)
+            setUser(user);
         })
     }
 
