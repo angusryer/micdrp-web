@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import firebase from '../../config/firebase';
-import { Nav } from '../';
+import { NavMinimal } from '../';
 
 function Perform({user, setUser}) {
 
@@ -22,12 +22,13 @@ function Perform({user, setUser}) {
 
     return (
         <div>
-            <Nav user={user} currentPage="perform" />
+            <NavMinimal userVisible user={user} currentPage="perform" />
+
         </div>
     )
 }
 
-export default Perform
+export default Perform;
 
 
 //     // <input class="zoom" type="range" min="1" max="5" step="1" value="2" />

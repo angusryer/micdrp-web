@@ -3,46 +3,53 @@
 .nav {
     &__container {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.25rem;
-        height: 3.5rem;
-        background-color: $DARK;
+        flex-flow: column nowrap;
+        padding: 1rem;
+        min-height: 8rem;
+        background-color: $LIGHT;
+        border-bottom: 1px solid $RED;
     }
 
-    &__title {
-        font-weight: 400;
-        font-size: 1.25rem;
-        color: $ORANGE;
-        letter-spacing: 0.2rem;
-        padding-bottom: 0.4rem;
+    &__menu {
+        height: 2.25rem;
+        display: flex;
+        justify-content: flex-end;
     }
 
-    &__user-group {
+    &__menu-icon {
+        width: auto;
+        height: 2rem;
+    }
+
+    &__user {
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
-        width: auto;
     }
 
-    &__user-name {
-        font-size: 1rem;
-        margin-right: 1rem;
-        color: $LIGHT;
-    }
-
-    &__logout {
-        width: 2.5rem;
-        height: 2.5rem;
+    &__avatar-container {
+        width: 5rem;
+        height: 5rem;
         border-radius: 50%;
-        background-color: $RED;
         overflow: hidden;
+        margin: 0 1rem 0 0;
     }
-
+    
     &__avatar {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
 
+    &__user-name {
+        font-weight: 600;
+        font-size: 1rem;
+        color: $RED;
+        letter-spacing: 0.1rem;
+        padding-bottom: 0.75rem;
+    }
+
+    &__feature {
+        font-size: 0.8rem;
+    }
 }

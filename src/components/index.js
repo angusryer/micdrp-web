@@ -5,5 +5,6 @@ export { default as Login } from './Login/Login';
 export { default as Learn } from './Learn/Learn';
 export { default as Dashboard } from './Dashboard/Dashboard';
 export { default as Nav } from './Nav/Nav';
+export { default as NavMinimal } from './NavMinimal/NavMinimal';
 export { default as AudioCanvas } from './AudioCanvas/AudioCanvas';
 export { default as Menu } from './Menu/Menu';

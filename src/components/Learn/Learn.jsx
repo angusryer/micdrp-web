@@ -1,9 +1,17 @@
-import React from 'react'
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import './Learn.scss';
+import loginIcon from '../../assets/images/log-in-outline.svg';
 
-function Learn(props) {
+function Learn() {
+
+    const history = useHistory();
+
     return (
         <div>
-            Learn
+            <div className="learn__login-container">
+                <img src={loginIcon} alt="Login" onClick={() => history.push('/login')} className="learn__login-icon" />
+            </div>
         </div>
     )
 }

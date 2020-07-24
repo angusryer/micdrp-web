@@ -1,1 +1,18 @@
 @import '../../styles/allutils';
+
+.learn {
+
+    &__login-container {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        height: 3rem;
+        background-color: transparent;
+        padding: 0.5rem;
+    }
+
+    &__login-icon {
+        width: auto;
+        height: 100%
+    }
+}

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import './Nav.scss';
+import { Link } from 'react-router-dom';
 import { Menu } from '../';
+import './Nav.scss';
+import hamburgerMenuIcon from '../../assets/images/menu-outline.svg';
 
 function Nav({ user, currentPage }) {
 
@@ -12,14 +14,18 @@ function Nav({ user, currentPage }) {
 
     return (
         <nav className="nav__container">
-            <div className="nav__title-group">
-                <h2 className="nav__title">micdrp</h2>
+            <div className="nav__menu" onClick={() => toggleMenu()}>
+                <img src={hamburgerMenuIcon} alt="Access menu" className="nav__menu-icon" />
+                <Menu isVisible={showMenu} currentPage={currentPage} />
             </div>
-            <div className="nav__user-group">
-                <div className="nav__user-name">{user.name}</div>
-                <div className="nav__logout" onClick={() => toggleMenu()}>
+            <div className="nav__user">
+                <div className="nav__avatar-container">
                     <img src={user.avatar} alt={user.name} className="nav__avatar" />
-                    <Menu isVisible={showMenu} currentPage={currentPage} />
+                </div>
+                <div className="nav__user-text">
+                    <div className="nav__user-name">{user.name}</div>
+                    <Link to="#"><div className="nav__feature">Share your progress!</div></Link>
+                    <Link to="#"><div className="nav__feature">Harmonize!</div></Link>
                 </div>
             </div>
         </nav>
