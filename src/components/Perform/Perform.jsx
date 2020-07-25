@@ -1,31 +1,50 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import firebase from '../../config/firebase';
 import { NavMinimal } from '../';
+import './Perform.scss';
+import playImage from '../../assets/images/play-circle-outline.png';
+import pauseImage from '../../assets/images/pause-circle-outline.png';
 
-function Perform({user, setUser}) {
+function Perform({ user, setUser }) {
 
-    const history = useHistory();
+  const history = useHistory();
+  const [playState, setPlayState] = useState(false);
 
-    useEffect(() => {
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-              const userData = {
-                uid: user.uid,
-                name: user.displayName,
-                avatar: user.photoURL,
-              }
-              setUser(userData)
-            }
-          })
-    }, [])
+  const handlePlayState = () => {
+    setPlayState(!playState);
+  }
 
-    return (
-        <div>
-            <NavMinimal userVisible user={user} currentPage="perform" />
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        const userData = {
+          uid: user.uid,
+          name: user.displayName,
+          avatar: user.photoURL,
+        }
+        setUser(userData)
+      }
+    })
+  }, [])
 
-        </div>
-    )
+  useEffect(() => {
+    // set up audio context and await user's play toggle
+  })
+
+  return (
+    <main className="perform">
+      <NavMinimal userVisible user={user} currentPage="perform" />
+      <section className="perform__activity">
+        {/* Main audio context goes here */}
+      </section>
+      <section className="perform__controls">
+        <button onClick={handlePlayState} className="perform__controls-button">
+          <img src={(playState) ? pauseImage : playImage} alt="Play/Pause" className="perform__controls-button-image" />
+        </button>
+      </section>
+    </main>
+  )
 }
 
 export default Perform;

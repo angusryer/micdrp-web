@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Menu } from '..';
 import './NavMinimal.scss';
-import hamburgMenuIcon from '../../assets/images/menu-outline.svg'
+import hamburgMenuIcon from '../../assets/images/menu-outline.svg';
+import hamburgMenuIconWhite from '../../assets/images/menu-outline-white.png';
 
 function NavMinimal({ user, currentPage, userVisible }) {
 
@@ -22,7 +23,9 @@ function NavMinimal({ user, currentPage, userVisible }) {
                 </div>
             ) : null}
             <div className="navminimal__menu" onClick={() => toggleMenu()}>
-                <img src={hamburgMenuIcon} alt="Access menu" className="navminimal__menu-icon" />
+                <img src={
+                    (currentPage === 'perform') ? hamburgMenuIconWhite : hamburgMenuIcon
+                    } alt="Access menu" className="navminimal__menu-icon" />
                 <Menu isVisible={showMenu} currentPage={currentPage} />
             </div>
         </nav>

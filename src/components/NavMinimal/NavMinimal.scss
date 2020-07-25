@@ -23,6 +23,7 @@
         border-radius: 50%;
         overflow: hidden;
         margin: 0 0.5rem 0 0.5rem;
+        border: 1px solid $RED;
     }
 
     &__avatar {
@@ -34,7 +35,7 @@
     &__user-name {
         font-size: 0.9rem;
         letter-spacing: 0.1rem;
-        color: $DARK;
+        color: $LIGHT;
     }
 
     &__menu {
