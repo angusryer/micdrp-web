@@ -7,6 +7,12 @@
     font-weight: 400;
     color: $DARK;
 
+    & > body,
+    & > main,
+    & > section {
+        background-color: $LIGHT;
+    }
+
     & > a {
         text-decoration-line: none;
 

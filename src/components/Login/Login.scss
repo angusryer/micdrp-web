@@ -32,15 +32,27 @@
         min-width: 18rem;
         min-height: 25rem;
         border: 1px solid $DARK;
-        border-radius: 0.25rem;
+        border-radius: 0.4rem;
         background-color: $DARK;
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
-        justify-content: space-around;
+        justify-content: space-between;
+        padding: 0 0 2.5rem 0;
+    }
+
+    &__title {
+        color: $LIGHT;
+        letter-spacing: 0.25rem;
+        line-height: 1rem;
+
     }
 
     &__logo-button-container {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: space-between;
         margin: 0 2rem 2rem 2rem;
     }
 

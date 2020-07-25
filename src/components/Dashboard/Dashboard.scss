@@ -1,1 +1,71 @@
 @import '../../styles/allutils';
+
+.dashboard {
+    background-color: $LIGHT;
+
+    &__progress-container {
+        height: 10rem;
+        border-radius: 0.25rem;
+        background-color: $DARK;
+    }
+
+    &__stats-container {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        height: auto;
+
+        &-left {
+            display: flex;
+            flex-flow: column nowrap;
+            align-items: center;
+            width: 40%;
+            padding: 0.5rem;
+            margin: 0.5rem;
+        }
+
+        &-right {
+            display: flex;
+            flex-flow: column nowrap;
+            align-items: center;
+            width: 40%;
+            padding: 0.5rem;
+            margin: 0.5rem;
+        }
+    }
+
+    &__activity-container {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: space-evenly;
+        border-top: 1px solid $RED;
+
+        & > a {
+            width: 80%;
+            display: flex;
+            justify-content: center;
+        }
+    }
+
+    &__activity {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 2rem;
+        margin: 0.25rem 0;
+        border: 1px solid $ORANGE;
+        border-radius: 1rem;
+        padding: auto 0;
+        background-color: $LIGHT;
+
+        & > span {
+            color: $DARK;
+        }
+
+        &:hover {
+            background-color: $ORANGE;
+        }
+    }
+}

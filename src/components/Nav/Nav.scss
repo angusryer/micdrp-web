@@ -7,7 +7,6 @@
         padding: 1rem;
         min-height: 8rem;
         background-color: $LIGHT;
-        border-bottom: 1px solid $RED;
     }
 
     &__menu {
@@ -51,5 +50,10 @@
 
     &__feature {
         font-size: 0.8rem;
+        margin: 0.05rem 0;
+
+        &:hover {
+            color: $RED;
+        }
     }
 }

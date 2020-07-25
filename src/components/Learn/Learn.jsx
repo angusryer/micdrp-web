@@ -10,7 +10,7 @@ function Learn() {
     return (
         <div>
             <div className="learn__login-container">
-                <img src={loginIcon} alt="Login" onClick={() => history.push('/login')} className="learn__login-icon" />
+                <img src={loginIcon} alt="Login" onClick={() => history.goBack()} className="learn__login-icon" />
             </div>
         </div>
     )
