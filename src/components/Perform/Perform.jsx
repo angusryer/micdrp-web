@@ -2,17 +2,71 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import firebase from '../../config/firebase';
 import { NavMinimal } from '../';
+import { AudioStreamParser } from '../';
+import * as Notes from '../../config/notes';
 import './Perform.scss';
 import playImage from '../../assets/images/play-circle-outline.png';
 import pauseImage from '../../assets/images/pause-circle-outline.png';
 
+
+//Init audio context
+let context = new AudioContext();
+
+// global output audio variables
+let gainNode;
+let oscillator;
+
+const playAudio = frequency => {
+  gainNode = context.createGain();
+  oscillator = context.createOscillator();
+  gainNode.connect(context.destination);
+  gainNode.gain.setValueAtTime(1, context.currentTime + 0.25);
+  oscillator.connect(gainNode);
+  oscillator.type = 'sine';
+  oscillator.frequency.value = frequency;
+  oscillator.start(context.currentTime);
+}
+
+const stopAudio = () => {
+  gainNode.gain.exponentialRampToValueAtTime(
+    0.00001, context.currentTime + 0.04
+  )
+  oscillator.stop(context.currentTime + 0.25);
+  oscillator.disconnect();
+}
+
+
+// MAIN COMPONENT
 function Perform({ user, setUser }) {
 
   const history = useHistory();
-  const [playState, setPlayState] = useState(false);
+  const [audioState, setAudioState] = useState(false);
+  const [currentFrequency, setCurrentFrequency] = useState(440);
+  const [audio, setAudio] = useState(null);
 
-  const handlePlayState = () => {
-    setPlayState(!playState);
+  const getMicrophone = async () => {
+    const audio = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: false
+    });
+    setAudio(audio);
+  }
+
+  const stopMicrophone = () => {
+    audio.getTracks().forEach(track => track.stop());
+    setAudio(null);
+  }
+
+  const toggleMicrophone = () => (audio) ? stopMicrophone() : getMicrophone();
+
+  const handleAudioState = async () => {
+    await toggleMicrophone();
+    setAudioState(!audioState);
+    if (audioState) {
+      stopAudio();
+    } else {
+      playAudio(currentFrequency);
+    }
   }
 
   useEffect(() => {
@@ -24,23 +78,21 @@ function Perform({ user, setUser }) {
           avatar: user.photoURL,
         }
         setUser(userData)
+      } else {
+        history.push('/login');
       }
     })
   }, [])
-
-  useEffect(() => {
-    // set up audio context and await user's play toggle
-  })
 
   return (
     <main className="perform">
       <NavMinimal userVisible user={user} currentPage="perform" />
       <section className="perform__activity">
-        {/* Main audio context goes here */}
+      {(audio) ? <AudioStreamParser audioContext={context} audio={audio} /> : null}
       </section>
       <section className="perform__controls">
-        <button onClick={handlePlayState} className="perform__controls-button">
-          <img src={(playState) ? pauseImage : playImage} alt="Play/Pause" className="perform__controls-button-image" />
+        <button onClick={handleAudioState} className="perform__controls-button">
+          <img src={(audioState) ? pauseImage : playImage} alt="Play/Pause" className="perform__controls-button-image" />
         </button>
       </section>
     </main>

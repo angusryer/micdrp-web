@@ -6,6 +6,6 @@ export { default as Learn } from './Learn/Learn';
 export { default as Dashboard } from './Dashboard/Dashboard';
 export { default as Nav } from './Nav/Nav';
 export { default as NavMinimal } from './NavMinimal/NavMinimal';
-export { default as AudioCanvas } from './AudioCanvas/AudioCanvas';
+export { default as AudioStreamParser } from './AudioCanvas/AudioStreamParser';
 export { default as Menu } from './Menu/Menu';
 export { default as StatItem } from './StatItem/StatItem';

@@ -3,7 +3,6 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { Splash, Login, Learn, Dashboard, Perform } from './components';
 import './styles/base.scss';
 
-
 const App = () => {
 
   const [user, setUser] = useState({});

@@ -25,6 +25,8 @@ function Dashboard({ user, setUser }) {
           avatar: user.photoURL,
         }
         setUser(userData)
+      } else {
+        history.push('/login');
       }
     })
   }, [])
@@ -65,13 +67,13 @@ function Dashboard({ user, setUser }) {
         </div>
         </section>
         <section className="dashboard__activity-container">
-          <Link><div className="dashboard__activity">
+          <Link to="/perform/:uid"><div className="dashboard__activity">
             <span>Expand your belting range</span>
           </div></Link>
-          <Link><div className="dashboard__activity">
+          <Link to="/perform/:uid"><div className="dashboard__activity">
             <span>Dances with Intervals</span>
           </div></Link>
-          <Link><div className="dashboard__activity">
+          <Link to="/perform/:uid"><div className="dashboard__activity">
             <span>Crash Practice</span>
           </div></Link>
         </section>
