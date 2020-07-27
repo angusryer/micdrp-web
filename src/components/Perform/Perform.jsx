@@ -1,37 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import firebase from '../../config/firebase';
-import { NavMinimal } from '../';
-import { AudioStreamParser } from '../';
-import * as Notes from '../../config/notes';
+import { NavMinimal, AudioStreamParser } from '../';
 import './Perform.scss';
 import playImage from '../../assets/images/play-circle-outline.png';
 import pauseImage from '../../assets/images/pause-circle-outline.png';
 
-
-//Init audio context
-let context = new AudioContext();
+//Init audio context globally
+let outputContext = new AudioContext();
 
 // global output audio variables
 let gainNode;
 let oscillator;
 
 const playAudio = frequency => {
-  gainNode = context.createGain();
-  oscillator = context.createOscillator();
-  gainNode.connect(context.destination);
-  gainNode.gain.setValueAtTime(1, context.currentTime + 0.25);
+  gainNode = outputContext.createGain();
+  oscillator = outputContext.createOscillator();
+  gainNode.connect(outputContext.destination);
+  gainNode.gain.setValueAtTime(1, outputContext.currentTime + 0.25);
   oscillator.connect(gainNode);
   oscillator.type = 'sine';
   oscillator.frequency.value = frequency;
-  oscillator.start(context.currentTime);
+  oscillator.start(outputContext.currentTime);
 }
 
 const stopAudio = () => {
   gainNode.gain.exponentialRampToValueAtTime(
-    0.00001, context.currentTime + 0.04
+    0.00001, outputContext.currentTime + 0.04
   )
-  oscillator.stop(context.currentTime + 0.25);
+  oscillator.stop(outputContext.currentTime + 0.25);
   oscillator.disconnect();
 }
 
@@ -41,8 +38,9 @@ function Perform({ user, setUser }) {
 
   const history = useHistory();
   const [audioState, setAudioState] = useState(false);
-  const [currentFrequency, setCurrentFrequency] = useState(440);
+  const [currentFrequency, setCurrentFrequency] = useState(415.30);
   const [audio, setAudio] = useState(null);
+  const performRef = useRef();
 
   const getMicrophone = async () => {
     const audio = await navigator.mediaDevices.getUserMedia({
@@ -87,8 +85,12 @@ function Perform({ user, setUser }) {
   return (
     <main className="perform">
       <NavMinimal userVisible user={user} currentPage="perform" />
-      <section className="perform__activity">
-      {(audio) ? <AudioStreamParser audioContext={context} audio={audio} /> : null}
+      <section className="perform__activity" ref={performRef}>
+        {(audio) ? <AudioStreamParser inputContext={outputContext}
+                                      audio={audio}
+                                      parentRef={performRef}
+                                      currentFrequency={currentFrequency}
+                                      setCurrentFrequency={setCurrentFrequency} /> : null}
       </section>
       <section className="perform__controls">
         <button onClick={handleAudioState} className="perform__controls-button">
@@ -156,61 +158,7 @@ export default Perform;
 
 
 
-//     const getPitch = function (buffer) {
-//         const size = buffer.length;
-//         const maxSamples = Math.floor(size / 2);
-//         let bestOffset = -1;
-//         let bestCorrelation = 0;
-//         let rms = 0;
-//         let foundGoodCorrelation = false;
-//         const correlations = [];
 
-//         let i = 0;
-//         while (i < size) {
-//             const val = buffer[i];
-//             rms += val * val;
-//             i++;
-//         }
-
-//         rms = Math.sqrt(rms / size);
-
-//         // not enough signal
-//         if (rms < 0.01) { return "-"; }
-
-//         let lastCorrelation = 1;
-
-//         let offset = minSamples;
-//         while (offset < maxSamples) {
-//             let correlation = 0;
-
-//             i = 0;
-//             while (i < maxSamples) {
-//                 correlation += Math.abs(buffer[i] - buffer[i + offset]);
-//                 i++;
-//             }
-
-//             correlation = 1 - (correlation / maxSamples);
-//             correlations[offset] = correlation;
-
-//             if ((correlation > 0.9) && (correlation > lastCorrelation)) {
-//                 foundGoodCorrelation = true;
-//                 if (correlation > bestCorrelation) {
-//                     bestCorrelation = correlation;
-//                     bestOffset = offset;
-//                 }
-//             } else if (foundGoodCorrelation) {
-//                 const shift = (correlations[bestOffset + 1] - correlations[bestOffset - 1]) / correlations[bestOffset];
-//                 return audioContext.sampleRate / (bestOffset + (8 * shift));
-//             }
-
-//             lastCorrelation = correlation;
-//             offset++;
-//         }
-
-//         if (bestCorrelation > 0.01) { return audioContext.sampleRate / bestOffset; }
-//         // no good match
-//         return -1;
-//     };
 
 
 

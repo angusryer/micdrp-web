@@ -121,3 +121,13 @@ export const getFrequencyFromNoteName = (noteName) => {
     return frequencies.filter( arrayNote => (arrayNote.name === noteName) )[0].freq;
 };
 
+export const getRelativeNote = (step, reference) => {
+    if (typeof(reference) === "string") {
+        const referenceIndex = frequencies.findIndex(arrayNote => (arrayNote.name === reference))
+        return frequencies[referenceIndex + step];
+    } else {
+        const referenceIndex = frequencies.findIndex(arrayNote => (arrayNote.freq === reference))
+        return frequencies[referenceIndex + step];
+    }
+}
+

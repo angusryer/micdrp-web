@@ -1,36 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import AudioCanvas from './AudioCanvas';
 
-function AudioStreamParser({ audioContext, audio }) {
+let analyser;
+let dataArray;
+let source;
+let rafId;
+
+function AudioStreamParser({ inputContext, audio, parentRef, currentFrequency }) {
 
   const [audioData, setAudioData] = useState(new Uint8Array(0));
 
-  let dataArray;
-  let analyser;
-  let source;
-  let rafId;
-
   useEffect(() => {
-    analyser = audioContext.createAnalyser();
+    analyser = new AnalyserNode(inputContext);
     dataArray = new Uint8Array(analyser.frequencyBinCount);
-    source = audioContext.createMediaStreamSource(audio);
+    source = inputContext.createMediaStreamSource(audio);
     source.connect(analyser);
-    rafId = requestAnimationFrame(tick);
+    rafId = requestAnimationFrame(update)
 
     return () => {
       cancelAnimationFrame(rafId);
       analyser.disconnect();
       source.disconnect();
     }
-  })
 
-  const tick = () => {
+  }, [])
+
+  const update = () => {
     analyser.getByteTimeDomainData(dataArray);
     setAudioData(dataArray);
-    rafId = requestAnimationFrame(tick);
+    rafId = requestAnimationFrame(update);
   }
 
-  return <AudioCanvas audioData={audioData} />;
+  return <AudioCanvas audioData={audioData}
+    parentRef={parentRef}
+    currentFrequency={currentFrequency}
+    inputContext={inputContext}
+  />
 }
 
 export default AudioStreamParser;
