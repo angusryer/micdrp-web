@@ -1,13 +1,17 @@
 @import "../../styles/allutils";
 
-// .audiocanvas {
+.audiocanvas {
 
-//     &__container {
-//         position: relative;
-//     }
+    &__container {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: center;
+        background-color: transparent;
+    }
 
-//     &__canvas {
-
-//     }
-// }
-
+    &__canvas {
+        translate: 0 50%;
+        background-color: transparent;
+    }
+}

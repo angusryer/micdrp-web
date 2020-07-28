@@ -124,10 +124,24 @@ export const getFrequencyFromNoteName = (noteName) => {
 export const getRelativeNote = (step, reference) => {
     if (typeof(reference) === "string") {
         const referenceIndex = frequencies.findIndex(arrayNote => (arrayNote.name === reference))
-        return frequencies[referenceIndex + step];
-    } else {
+        if (referenceIndex + step > frequencies.length) {
+            return frequencies[frequencies.length - 1];
+        } else {
+            return frequencies[(referenceIndex + step >= 0) ? referenceIndex + step : 0];
+        }
+    } else if (typeof(reference) === "number" ) {
         const referenceIndex = frequencies.findIndex(arrayNote => (arrayNote.freq === reference))
-        return frequencies[referenceIndex + step];
+        if ( referenceIndex + step > frequencies.length) {
+            return frequencies[frequencies.length - 1];
+        } else {
+            return frequencies[(referenceIndex + step >= 0) ? referenceIndex + step : 0];
+        }
+    } else {
+        return 0;
     }
+}
+
+export const getLinearPitchAsPercentage = (frequency) => {
+    return (39.86 * Math.log10(frequency / 440) + 49) / (39.86 * Math.log10(frequencies[frequencies.length - 1].freq / 440) + 49)
 }
 

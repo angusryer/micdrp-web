@@ -9,3 +9,4 @@ export { default as NavMinimal } from './NavMinimal/NavMinimal';
 export { default as AudioStreamParser } from './AudioCanvas/AudioStreamParser';
 export { default as Menu } from './Menu/Menu';
 export { default as StatItem } from './StatItem/StatItem';
+export { default as NoteName } from './NoteName/NoteName';

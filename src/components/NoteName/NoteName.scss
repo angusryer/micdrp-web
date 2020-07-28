@@ -1,0 +1,25 @@
+@import '../../styles/allutils';
+
+.notename {
+    position: absolute;
+    top: 50%;
+    margin: 0 auto;
+
+    &__target-note {
+        font-family: 'oswald';
+        font-weight: 400;
+        font-size: 1.25rem;
+        color: $LIGHT;
+    }
+}
+
+.userDiv {
+    width: 2rem;
+}
+
+.userText {
+    font-family: 'oswald';
+    font-weight: 300;
+    font-size: 0.9rem;
+    color: $ORANGE;
+}
