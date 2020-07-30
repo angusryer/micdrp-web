@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { Splash, Login, Learn, Dashboard, Perform } from './components';
 import './styles/base.scss';
 
@@ -8,7 +8,6 @@ const App = () => {
   const [user, setUser] = useState({});
 
   return (
-    <BrowserRouter>
       <Switch>
         <Route exact path="/">
           <Splash setUser={setUser} />
@@ -26,7 +25,6 @@ const App = () => {
           <Perform user={user} setUser={setUser} />
         </Route>
       </Switch>
-    </BrowserRouter>
   )
 }
 
