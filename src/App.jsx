@@ -1,31 +1,53 @@
-import React, { useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
-import { Splash, Login, Learn, Dashboard, Perform } from './pages';
+import React, { useState, useEffect } from 'react';
+import ReactLoading from 'react-loading';
+import { useHistory, Switch, Route } from 'react-router-dom';
+import firebase from './config/firebase';
+import { Login, Learn, AppNavigator } from './pages';
 import './styles/base.scss';
 
-const App = () => {
+function App() {
 
+  const history = useHistory();
   const [user, setUser] = useState({});
 
-  return (
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        const urlName = user.displayName.replace(" ", "").toLowerCase()
+        setUser({
+          uid: user.uid,
+          name: user.displayName,
+          avatar: user.photoURL,
+          urlName: urlName,
+        })
+        history.push(`/${urlName}`) // AppNavigator
+      } else {
+        history.push(`/login`)
+      }
+    })
+  }, [])
+
+  if (!user) {
+    return (
+      <div className="loading__container">
+        <ReactLoading type={'bubbles'} color={'#B65245'} height={'5rem'} width={'5rem'} />
+      </div>
+    )
+  } else {
+    return (
       <Switch>
-        <Route exact path="/">
-          <Splash setUser={setUser} />
-        </Route>
         <Route path="/login">
           <Login setUser={setUser} />
         </Route>
         <Route path="/learn">
           <Learn />
         </Route>
-        <Route exact path="/dashboard/:uid">
-          <Dashboard user={user} setUser={setUser} />
-        </Route>
-        <Route exact path="/perform/:uid">
-          <Perform user={user} setUser={setUser} />
+        <Route >
+          <AppNavigator user={user} />
         </Route>
       </Switch>
-  )
+    )
+  }
 }
 
 export default App;

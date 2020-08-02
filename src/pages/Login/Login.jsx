@@ -13,13 +13,18 @@ function Login({ setUser }) {
     const signIn = () => {
         const provider = new firebase.auth.GoogleAuthProvider();
         firebase.auth().signInWithPopup(provider).then(result => {
+            // check if new user. If yes, generate default settings and then render AppNavigator
+            // If no, then get user, check settings and then render AppNavigator
+            const urlName = result.user.displayName.replace(" ", "").toLowerCase();
             const user = {
                 uid: result.user.uid,
                 name: result.user.displayName,
                 avatar: result.user.photoURL,
+                urlName: urlName,
             }
             setUser(user);
-            history.push(`/dashboard/${result.user.uid}`)
+            // prolly right here?
+            history.push(`/${urlName}/dashboard`)
         })
     }
 
