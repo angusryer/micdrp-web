@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import AudioCanvas from './AudioCanvas';
+import { AudioCanvas } from '../';
 
 let dataArray;
 let source;
 let rafId;
 
-function AudioStreamParser({ inputContext, audio, parentRef, currentFrequency }) {
+function AudioParser({ inputContext, audio, parentRef, currentFrequency }) {
 
   const [audioData, setAudioData] = useState(new Float32Array(0));
   const [analyser, setAnalyser] = useState(new AnalyserNode(inputContext))
@@ -45,4 +45,4 @@ function AudioStreamParser({ inputContext, audio, parentRef, currentFrequency })
   )
 }
 
-export default AudioStreamParser;
+export default AudioParser;

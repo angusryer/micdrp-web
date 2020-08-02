@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { Splash, Login, Learn, Dashboard, Perform } from './components';
+import { Splash, Login, Learn, Dashboard, Perform } from './pages';
 import './styles/base.scss';
 
 const App = () => {

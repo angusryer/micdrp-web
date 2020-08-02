@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import firebase from '../../config/firebase';
-import { NavMinimal, AudioStreamParser, NoteName } from '../';
+import { NavMinimal, AudioParser, NoteName } from '../../components';
 import './Perform.scss';
 import * as Notes from '../../config/notes';
 import playImage from '../../assets/images/play-circle-outline.png';
@@ -113,7 +113,7 @@ function Perform({ user, setUser }) {
       <NavMinimal userVisible user={user} currentPage="perform" />
       <section className="perform__activity" ref={performRef}>
         <hr className="perform__reference" />
-        {(audio) ? <AudioStreamParser inputContext={outputContext}
+        {(audio) ? <AudioParser inputContext={outputContext}
           audio={audio}
           parentRef={performRef}
           currentFrequency={currentFrequency} />

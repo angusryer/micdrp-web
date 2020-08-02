@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import firebase from '../../config/firebase';
-import { Nav, StatItem } from '../';
+import { Nav, StatItem } from '../../components';
 import './Dashboard.scss';
 
 function Dashboard({ user, setUser }) {

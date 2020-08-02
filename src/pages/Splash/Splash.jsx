@@ -7,7 +7,6 @@ import './Splash.scss';
 const Splash = ({ setUser }) => {
 
     const history = useHistory();
-    // console.log(history);
 
     useEffect(() => {
         firebase.auth().onAuthStateChanged(user => {
