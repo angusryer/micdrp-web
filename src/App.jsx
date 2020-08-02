@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import ReactLoading from 'react-loading';
 import { useHistory, Switch, Route } from 'react-router-dom';
+import ReactLoading from 'react-loading';
 import firebase from './config/firebase';
-import { Login, Learn, AppNavigator } from './pages';
+import { Login, Learn, Navigator } from './pages';
 import './styles/base.scss';
 
 function App() {
@@ -34,6 +34,7 @@ function App() {
       </div>
     )
   } else {
+    console.log(user)
     return (
       <Switch>
         <Route path="/login">
@@ -43,7 +44,7 @@ function App() {
           <Learn />
         </Route>
         <Route >
-          <AppNavigator user={user} />
+          <Navigator user={user} />
         </Route>
       </Switch>
     )

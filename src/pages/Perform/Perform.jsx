@@ -42,7 +42,7 @@ const stopAudio = () => {
 
 
 // MAIN COMPONENT
-function Perform({ user, setUser }) {
+function Perform({ user, userData }) {
 
   const history = useHistory();
   const [audioState, setAudioState] = useState(false);
@@ -88,21 +88,6 @@ function Perform({ user, setUser }) {
       playAudio(currentFrequency);
     }
   }
-
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        const userData = {
-          uid: user.uid,
-          name: user.displayName,
-          avatar: user.photoURL,
-        }
-        setUser(userData)
-      } else {
-        history.push('/login');
-      }
-    })
-  }, [])
 
   useEffect(() => {
 

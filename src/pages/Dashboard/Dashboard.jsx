@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import firebase from '../../config/firebase';
 import { Nav, StatItem } from '../../components';
 import './Dashboard.scss';
 
-function Dashboard({ user, setUser }) {
+function Dashboard({ user, userData }) {
 
   const history = useHistory();
   const [performanceData, setperformanceData] = useState({
@@ -17,24 +16,12 @@ function Dashboard({ user, setUser }) {
   });
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        const userData = {
-          uid: user.uid,
-          name: user.displayName,
-          avatar: user.photoURL,
-        }
-        setUser(userData)
-      } else {
-        history.push('/login');
-      }
-    })
-  }, [])
-
-  useEffect(() => {
     // Get user performance data and store in object
   }, [])
 
+  if (!user) {
+    return "Loading"
+  } else {
   return (
     <main className="dashboard">
       <Nav user={user} currentPage="dash" />
@@ -80,6 +67,7 @@ function Dashboard({ user, setUser }) {
       
     </main>
   )
+  }
 }
 
-export default Dashboard
+export default Dashboard;
