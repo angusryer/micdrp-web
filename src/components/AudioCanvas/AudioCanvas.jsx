@@ -1,6 +1,6 @@
 import React, { useState, createRef, useEffect } from 'react';
 import { PitchDetector } from 'pitchy';
-import * as Notes from '../../config/notes';
+import * as Notes from '../../utilities/notes';
 import './AudioCanvas.scss';
 
 let detector;

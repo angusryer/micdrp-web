@@ -1,5 +1,5 @@
 import React from 'react'
-import firebase from '../../config/firebase';
+import firebase from '../../utilities/firebase';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import './Menu.scss';
 

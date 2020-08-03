@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, Switch, Route } from 'react-router-dom';
 import ReactLoading from 'react-loading';
-import firebase from './config/firebase';
+import Cookies from 'universal-cookie';
+import firebase from './utilities/firebase';
+import usePrevious from './utilities/hooks';
 import { Login, Learn, Navigator } from './pages';
 import './styles/base.scss';
 
@@ -10,16 +12,33 @@ function App() {
   const history = useHistory();
   const [user, setUser] = useState({});
 
+  const checkForUserCookie = (cookies, user) => {
+    for (let userCookie in cookies) {
+      if (userCookie === user) {
+        return true;
+      }
+      return false;
+    }
+  }
+
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
+        // Assemble fresh user Object and set it to state
         const urlName = user.displayName.replace(" ", "").toLowerCase()
-        setUser({
+        const userObject = {
           uid: user.uid,
           name: user.displayName,
           avatar: user.photoURL,
           urlName: urlName,
-        })
+        }
+        setUser(userObject)
+        // Check if a cookie exists. If not, ask user, and if yes, create it
+        const cookie = new Cookies();
+        const cookies = cookie.getAll();
+        if (Object.keys(cookies).length === 0 || !checkForUserCookie(cookies, user.uid)) {
+          cookie.set(user.uid, JSON.stringify(userObject), { path: '/' });
+        }
         history.push(`/${urlName}`) // AppNavigator
       } else {
         history.push(`/login`)
@@ -34,7 +53,6 @@ function App() {
       </div>
     )
   } else {
-    console.log(user)
     return (
       <Switch>
         <Route path="/login">
@@ -43,7 +61,7 @@ function App() {
         <Route path="/learn">
           <Learn />
         </Route>
-        <Route >
+        <Route path="/:urlName">
           <Navigator user={user} />
         </Route>
       </Switch>

@@ -1,5 +1,5 @@
 import React from 'react';
-import firebase from '../../config/firebase';
+import firebase from '../../utilities/firebase';
 import './Login.scss';
 import googleEmblem from '../../assets/images/Google-01.png';
 import micdrpLogo from '../../assets/images/kid-bellowing.png';

@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import firebase from '../../config/firebase';
+import firebase from '../../utilities/firebase';
 import { NavMinimal, AudioParser, NoteName } from '../../components';
 import './Perform.scss';
-import * as Notes from '../../config/notes';
+import * as Notes from '../../utilities/notes';
 import playImage from '../../assets/images/play-circle-outline.png';
 import pauseImage from '../../assets/images/pause-circle-outline.png';
 import previousImage from '../../assets/images/play-skip-back-outline.png';
