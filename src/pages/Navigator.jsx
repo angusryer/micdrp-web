@@ -3,7 +3,7 @@ import ReactLoading from 'react-loading';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import firebase from '../utilities/firebase';
 import { Dashboard, Perform } from '.';
-import usePrevious from '../utilities/hooks';
+import { usePrevious } from '../utilities/utilities';
 
 function Navigator({ user }) {
 

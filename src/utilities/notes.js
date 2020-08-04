@@ -1,4 +1,3 @@
-
 export const frequencies = [
     { name: 'C 0', freq: 16.35 },
     { name: 'C#|Db 0', freq: 17.32 },
