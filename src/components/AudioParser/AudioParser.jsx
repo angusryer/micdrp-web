@@ -1,37 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import AudioAnalyserEngine from '../../audio/AudioAnalyserEngine';
 import { AudioCanvas } from '../';
 
-let dataArray;
-let source;
-let rafId;
+let audioDataArray;
+// let rafId;
 
 function AudioParser({ inputContext, audio, parentRef, currentFrequency }) {
 
   const [audioData, setAudioData] = useState(new Float32Array(0));
-  const [analyser, setAnalyser] = useState(new AnalyserNode(inputContext))
-
-  const startUpAudio = async () => {
-    dataArray = new Float32Array(analyser.frequencyBinCount);
-    await setAudioData(dataArray);
-    source = inputContext.createMediaStreamSource(audio);
-    source.connect(analyser);
-    rafId = requestAnimationFrame(update)
-  }
+  const [analyser, setAnalyser] = useState(new AudioAnalyserEngine(inputContext.context, audio))
 
   useEffect(() => {
-    startUpAudio();
+    audioDataArray = analyser.initDataArray();
+    setAudioData(audioDataArray); // async?
+    // rafId = requestAnimationFrame(update);
 
     return () => {
-      cancelAnimationFrame(rafId);
+      // cancelAnimationFrame(rafId);
       analyser.disconnect();
-      source.disconnect();
     }
 
   }, [])
 
-  const update = async () => {
-    analyser.getFloatTimeDomainData(dataArray);
-    await setAudioData(dataArray);
+  const update = () => {
+    analyser.getFloatTimeDomainData();
+    setAudioData(audioDataArray); // async?
     rafId = requestAnimationFrame(update);
   }
 

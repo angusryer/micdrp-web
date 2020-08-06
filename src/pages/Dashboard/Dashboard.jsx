@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ReactLoading } from 'react-loading';
 import { useHistory, Link } from 'react-router-dom';
 import { Nav, StatItem } from '../../components';
 import './Dashboard.scss';
@@ -20,8 +21,12 @@ function Dashboard({ user, userData }) {
   }, [])
 
   if (!user) {
-    return "Loading"
-  } else {
+    return (
+        <div className="loading__container">
+            <ReactLoading type={'bubbles'} color={'#B65245'} height={'5rem'} width={'5rem'} />
+        </div>
+    )
+} else {
   return (
     <main className="dashboard">
       <Nav user={user} currentPage="dash" />

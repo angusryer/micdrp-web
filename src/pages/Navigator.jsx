@@ -38,7 +38,7 @@ function Navigator({ user }) {
         if (user) {
             getUserData(user);
         }
-    }, [])
+    }, [user])
 
 
     if (!userData) {

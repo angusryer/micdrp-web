@@ -31,16 +31,6 @@ function AudioCanvas({ inputContext, analyser, audioData, parentRef, currentFreq
     }
   }
 
-  const updateStates = async () => {
-    analyser.getFloatTimeDomainData(input)
-    let [pitch, clarity] = detector.findPitch(input, inputContext.sampleRate);
-    await setUserPitch(pitch);
-    const verticalPosition = getVerticalPosition(currentFrequency, userPitch, clarity);
-    await setYPosition(verticalPosition * 0.8);
-    const canvasWidthTemp = (verticalPosition === 0) ? screenWidth : (parentRef.current.offsetWidth) - Math.abs((verticalPosition / (parentRef.current.offsetHeight / 2)) * parentRef.current.offsetWidth);
-    await setCanvasWidth(canvasWidthTemp);
-  }
-
   // Draw this instant's audioData buffer strem values to canvas, then loop
   let rId;
   const update = (canvas) => {
@@ -69,10 +59,20 @@ function AudioCanvas({ inputContext, analyser, audioData, parentRef, currentFreq
     });
   }
 
+  const updateStates = async () => {
+    analyser.getFloatTimeDomainData(input)
+    let [pitch, clarity] = detector.findPitch(input, inputContext.context.sampleRate);
+    await setUserPitch(pitch);
+    const verticalPosition = getVerticalPosition(currentFrequency, userPitch, clarity);
+    await setYPosition(verticalPosition * 0.8);
+    const canvasWidthTemp = (verticalPosition === 0) ? screenWidth : (parentRef.current.offsetWidth) - Math.abs((verticalPosition / (parentRef.current.offsetHeight / 2)) * parentRef.current.offsetWidth);
+    await setCanvasWidth(canvasWidthTemp);
+  }
+
   // Continually run these updates: get user pitch, translate that into a vertical position,
   // get canvas width from the vertical position, and re-draw the canvas
   useEffect(() => {
-    detector = PitchDetector.forFloat32Array(analyser.fftSize);
+    detector = PitchDetector.forFloat32Array(analyser.analyser.fftSize);
     input = new Float32Array(detector.inputLength);
     updateStates();
     update(canvasRef.current);
