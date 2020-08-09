@@ -27,14 +27,14 @@ const playAudio = frequency => {
   oscillator.type = 'sine';
   oscillator.frequency.value = frequency;
   gainNode.gain.exponentialRampToValueAtTime(
-    0.75, outputContext.currentTime + 2
+    0.05, outputContext.currentTime
   )
   oscillator.start(outputContext.currentTime);
 }
 
 const stopAudio = () => {
   gainNode.gain.exponentialRampToValueAtTime(
-    0.00001, outputContext.currentTime + 0.5
+    0.00001, outputContext.currentTime
   )
   oscillator.stop(outputContext.currentTime);
   oscillator.disconnect();

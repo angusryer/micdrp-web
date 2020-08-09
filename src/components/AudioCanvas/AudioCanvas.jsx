@@ -1,5 +1,6 @@
 import React, { useState, createRef, useEffect } from 'react';
 import { PitchDetector } from 'pitchy';
+import usePrevious from '../../config/functions';
 import * as Notes from '../../config/notes';
 import './AudioCanvas.scss';
 
@@ -12,6 +13,8 @@ function AudioCanvas({ inputContext, analyser, audioData, parentRef, currentFreq
   const [yPosition, setYPosition] = useState(0);
   const [canvasWidth, setCanvasWidth] = useState(0);
   const [userPitch, setUserPitch] = useState(440);
+  const [onTimer, setOnTimer] = useState(0);
+  const prevTimer = usePrevious(onTimer);
   const [screenWidth, setScreenWidth] = useState(parentRef.current.offsetWidth);
   const [screenHeight, setScreenHeight] = useState(parentRef.current.offsetHeight);
 
@@ -31,7 +34,24 @@ function AudioCanvas({ inputContext, analyser, audioData, parentRef, currentFreq
     }
   }
 
+  const startOnPitchTimer = () => {
+    if (userPitch > (currentFrequency * 0.98) && userPitch < (currentFrequency * 1.02)) {
+      // user pitch is good!
+      setOnTimer(inputContext.currentTime);
+      setTimeout(() => {
+        if (onTimer === prevTimer) {
+          console.log("You're singing in tune!");
+        }
+      }, 3000)
+    }
+  }
+
+  const stopOnPitchTimer = () => {
+
+  }
+
   const updateStates = async () => {
+    startOnPitchTimer();
     analyser.getFloatTimeDomainData(input)
     let [pitch, clarity] = detector.findPitch(input, inputContext.sampleRate);
     await setUserPitch(pitch);
@@ -51,12 +71,12 @@ function AudioCanvas({ inputContext, analyser, audioData, parentRef, currentFreq
     context.strokeStyle = '#DC9F6F'; //$ORANGE
     context.clearRect(0, 0, width, height);
     context.beginPath();
-    context.moveTo(0, height / 2);
+    context.moveTo(0, height / 4);
 
     let x = 0;
     const sliceWidth = (width * 1) / audioData.length;
     for (const item of audioData) {
-      const y = item * 2 * height;
+      const y = item * height;
       context.lineTo(x, y);
       x += sliceWidth;
     }

@@ -5,13 +5,13 @@
         display: flex;
         flex-flow: column nowrap;
         position: absolute;
+        right: 1.3rem;
+        top: 2.75rem;
         justify-content: center;
-        top: 3rem;
-        right: 3rem;
         height: 6rem;
         width: 6rem;
-        background-color: $LIGHT;
-        border: none;
+        background-color: transparentize($color: $LIGHT, $amount: 0.25);
+        border: 0.5px solid $DARK;
         border-radius: 0.3rem;
     }
 
