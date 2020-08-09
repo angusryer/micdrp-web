@@ -23,17 +23,13 @@ function Perform({ user, userData }) {
   const playNextNote = async () => {
     const nextNote = Notes.getRelativeNote(1, currentFrequency).freq
     await setCurrentFrequency(Notes.getRelativeNote(1, currentFrequency).freq)
-    audioEngine.stopAudio();
-    audioEngine.setFrequency(nextNote);
-    audioEngine.playAudio(nextNote);
+    audioEngine.changeToNote(nextNote);
   }
 
   const playPreviousNote = async () => {
     const previousNote = Notes.getRelativeNote(-1, currentFrequency).freq
     await setCurrentFrequency(previousNote)
-    audioEngine.stopAudio();
-    audioEngine.setFrequency(previousNote)
-    audioEngine.playAudio();
+    audioEngine.changeToNote(previousNote)
   }
 
   const getMicrophone = async () => {
@@ -57,8 +53,8 @@ function Perform({ user, userData }) {
     if (audioState) {
       audioEngine.stopAudio();
     } else {
-      audioEngine.setFrequency(currentFrequency);
-      audioEngine.playAudio();
+      AudioOutputEngine.setFrequency(currentFrequency);
+      AudioOutputEngine.playAudio();
     }
   }
 

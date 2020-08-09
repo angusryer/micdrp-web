@@ -7,17 +7,18 @@ let audioDataArray;
 
 function AudioParser({ inputContext, audio, parentRef, currentFrequency }) {
 
-  const [audioData, setAudioData] = useState(new Float32Array(0));
+  const [audioData, setAudioData] = useState(new Float32Array(1024));
   const [analyser, setAnalyser] = useState(new AudioAnalyserEngine(inputContext.context, audio))
 
   useEffect(() => {
+    console.log('111 => ', analyser)
     audioDataArray = analyser.initDataArray();
     setAudioData(audioDataArray); // async?
     // rafId = requestAnimationFrame(update);
 
     return () => {
       // cancelAnimationFrame(rafId);
-      analyser.disconnect();
+      analyser.analyser.disconnect();
     }
 
   }, [])

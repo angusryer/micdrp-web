@@ -92,7 +92,7 @@ function AudioCanvas({ inputContext, analyser, audioData, parentRef, currentFreq
   // Continually run these updates: get user pitch, translate that into a vertical position,
   // get canvas width from the vertical position, and re-draw the canvas
   useEffect(() => {
-    detector = PitchDetector.forFloat32Array(analyser.fftSize);
+    detector = PitchDetector.forFloat32Array(analyser.analyser.fftSize);
     input = new Float32Array(detector.inputLength);
     updateStates();
     update(canvasRef.current);
