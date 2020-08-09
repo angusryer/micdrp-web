@@ -10,8 +10,8 @@
         right: 3rem;
         height: 6rem;
         width: 6rem;
-        background-color: $LIGHT;
-        border: none;
+        background-color: transparentize($color: $LIGHT, $amount: 0.25);
+        border: 0.5px solid $DARK;
         border-radius: 0.3rem;
     }
 

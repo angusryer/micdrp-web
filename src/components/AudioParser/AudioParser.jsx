@@ -25,7 +25,7 @@ function AudioParser({ inputContext, audio, parentRef, currentFrequency }) {
   const update = () => {
     analyser.getFloatTimeDomainData();
     setAudioData(audioDataArray); // async?
-    rafId = requestAnimationFrame(update);
+    // rafId = requestAnimationFrame(update);
   }
 
   return (
