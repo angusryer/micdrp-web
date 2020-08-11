@@ -17,10 +17,9 @@ let rafId;
 // MAIN COMPONENT
 function Perform({ user, userData }) {
 
-  const history = useHistory();
   const [audioState, setAudioState] = useState(false);
   const [currentFrequency, setCurrentFrequency] = useState(220.00);
-  const [audio, setAudio] = useState(null);
+  const [audioStream, setAudioStream] = useState(null);
   const parentRef = useRef();
   const [audioData, setAudioData] = useState(new Float32Array(1024));
 
@@ -43,21 +42,21 @@ function Perform({ user, userData }) {
   }
 
   const getMicrophone = async () => {
-    const audio = await navigator.mediaDevices.getUserMedia({
+    const audioStream = await navigator.mediaDevices.getUserMedia({
       audio: true,
       video: false
     });
-    setAudio(audio);
-    analyser = new AudioAnalyserEngine(audio);
+    setAudioStream(audioStream);
+    analyser = new AudioAnalyserEngine(audioStream); // Shouldn't be setting this here
   }
 
   const stopMicrophone = () => {
-    audio.getTracks().forEach(track => track.stop());
-    setAudio(null);
+    audioStream.getTracks().forEach(track => track.stop());
+    setAudioStream(null);
   }
 
   const handleAudioState = async () => {
-    await (audio) ? stopMicrophone() : getMicrophone();
+    await (audioStream) ? stopMicrophone() : getMicrophone();
     setAudioState(!audioState);
     if (audioState) {
       AudioOutputEngine.stopAudio();
@@ -93,7 +92,7 @@ function Perform({ user, userData }) {
       <NavMinimal userVisible user={user} currentPage="perform" />
       <section className="perform__activity" ref={parentRef}>
         <hr className="perform__reference" />
-        {(audio & analyser) ? (
+        {(audioStream & analyser) ? (
         <AudioCanvas audioData={audioData}
           analyser={analyser}
           parentRef={parentRef}
