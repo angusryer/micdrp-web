@@ -1,8 +1,10 @@
+import AudioOutputEngine from './AudioOutputEngine';
+
 class AudioAnalyserEngine {
 
-    constructor(audioContext, audioStream) {
-        this.analyser = new AnalyserNode(audioContext);
-        this.audioSource = audioContext.createMediaStreamSource(audioStream);
+    constructor(audioStream) {
+        this.analyser = new AnalyserNode(AudioOutputEngine.context);
+        this.audioSource = AudioOutputEngine.context.createMediaStreamSource(audioStream);
         this.audioSource.connect(this.analyser);
     }
 

@@ -3,11 +3,12 @@ import { PitchDetector } from 'pitchy';
 import usePrevious from '../../utilities/utilities';
 import * as Notes from '../../utilities/notes';
 import './AudioCanvas.scss';
+import AudioOutputEngine from '../../audio/AudioOutputEngine';
 
 let detector;
 let input;
 
-function AudioCanvas({ inputContext, analyser, audioData, parentRef, currentFrequency }) {
+function AudioCanvas({ analyser, audioData, parentRef, currentFrequency }) {
 
   const canvasRef = createRef();
   const [yPosition, setYPosition] = useState(0);
@@ -15,8 +16,8 @@ function AudioCanvas({ inputContext, analyser, audioData, parentRef, currentFreq
   const [userPitch, setUserPitch] = useState(440);
   const [onTimer, setOnTimer] = useState(0);
   const prevTimer = usePrevious(onTimer);
-  const [screenWidth, setScreenWidth] = useState(parentRef.current.offsetWidth);
-  const [screenHeight, setScreenHeight] = useState(parentRef.current.offsetHeight);
+  const screenWidth = parentRef.current.offsetWidth;
+  const screenHeight = parentRef.current.offsetHeight;
 
   // Get vertical position of user's pitch as a percentage of container height, expressed in pixels
   const getVerticalPosition = (currentFrequency, userFrequency, clarity) => {
@@ -37,7 +38,7 @@ function AudioCanvas({ inputContext, analyser, audioData, parentRef, currentFreq
   const startOnPitchTimer = () => {
     if (userPitch > (currentFrequency * 0.98) && userPitch < (currentFrequency * 1.02)) {
       // user pitch is good!
-      setOnTimer(inputContext.currentTime);
+      setOnTimer(AudioOutputEngine.context.currentTime);
       setTimeout(() => {
         if (onTimer === prevTimer) {
           console.log("You're singing in tune!");
@@ -53,7 +54,7 @@ function AudioCanvas({ inputContext, analyser, audioData, parentRef, currentFreq
   const updateStates = async () => {
     startOnPitchTimer();
     analyser.getFloatTimeDomainData(input)
-    let [pitch, clarity] = detector.findPitch(input, inputContext.sampleRate);
+    let [pitch, clarity] = detector.findPitch(input, AudioOutputEngine.context.sampleRate);
     await setUserPitch(pitch);
     const verticalPosition = getVerticalPosition(currentFrequency, userPitch, clarity);
     await setYPosition(verticalPosition * 0.8);

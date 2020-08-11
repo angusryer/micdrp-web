@@ -1,14 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import firebase from '../../utilities/firebase';
-import { NavMinimal, AudioParser, NoteName, AudioCanvas } from '../../components';
+import { NavMinimal, NoteName, AudioCanvas } from '../../components';
 import AudioOutputEngine from '../../audio/AudioOutputEngine';
+import AudioAnalyserEngine from '../../audio/AudioAnalyserEngine';
 import './Perform.scss';
 import * as Notes from '../../utilities/notes';
 import playImage from '../../assets/images/play-circle-outline.png';
 import pauseImage from '../../assets/images/pause-circle-outline.png';
 import previousImage from '../../assets/images/play-skip-back-outline.png';
 import nextImage from '../../assets/images/play-skip-forward-outline.png';
+
+let analyser;
+let audioDataArray;
+let rafId;
 
 // MAIN COMPONENT
 function Perform({ user, userData }) {
@@ -17,19 +21,25 @@ function Perform({ user, userData }) {
   const [audioState, setAudioState] = useState(false);
   const [currentFrequency, setCurrentFrequency] = useState(220.00);
   const [audio, setAudio] = useState(null);
-  const performRef = useRef();
-  const audioEngine = new AudioOutputEngine();
+  const parentRef = useRef();
+  const [audioData, setAudioData] = useState(new Float32Array(1024));
 
   const playNextNote = async () => {
     const nextNote = Notes.getRelativeNote(1, currentFrequency).freq
     await setCurrentFrequency(Notes.getRelativeNote(1, currentFrequency).freq)
-    audioEngine.changeToNote(nextNote);
+    if (audioState) {
+      AudioOutputEngine.stopAudio();
+      AudioOutputEngine.playAudio(nextNote);
+    }
   }
 
   const playPreviousNote = async () => {
     const previousNote = Notes.getRelativeNote(-1, currentFrequency).freq
     await setCurrentFrequency(previousNote)
-    audioEngine.changeToNote(previousNote)
+    if (audioState) {
+      AudioOutputEngine.stopAudio();
+      AudioOutputEngine.playAudio(previousNote);
+    }
   }
 
   const getMicrophone = async () => {
@@ -38,6 +48,7 @@ function Perform({ user, userData }) {
       video: false
     });
     setAudio(audio);
+    analyser = new AudioAnalyserEngine(audio);
   }
 
   const stopMicrophone = () => {
@@ -45,30 +56,51 @@ function Perform({ user, userData }) {
     setAudio(null);
   }
 
-  const toggleMicrophone = () => (audio) ? stopMicrophone() : getMicrophone();
-
   const handleAudioState = async () => {
-    await toggleMicrophone();
+    await (audio) ? stopMicrophone() : getMicrophone();
     setAudioState(!audioState);
     if (audioState) {
-      audioEngine.stopAudio();
+      AudioOutputEngine.stopAudio();
     } else {
-      AudioOutputEngine.setFrequency(currentFrequency);
-      AudioOutputEngine.playAudio();
+      AudioOutputEngine.playAudio(currentFrequency);
     }
+  }
+
+  useEffect(() => {
+    if (analyser) { 
+      audioDataArray = analyser.initDataArray();
+      setAudioData(audioDataArray); // async?
+      rafId = requestAnimationFrame(update);
+    }
+
+    return () => {
+      if (analyser) {
+        cancelAnimationFrame(rafId);
+        analyser.analyser.disconnect();
+      }
+    }
+
+  }, [analyser])
+
+  const update = () => {
+    analyser.getFloatTimeDomainData();
+    setAudioData(audioDataArray); // async?
+    rafId = requestAnimationFrame(update);
   }
 
   return (
     <main className="perform">
       <NavMinimal userVisible user={user} currentPage="perform" />
-      <section className="perform__activity" ref={performRef}>
+      <section className="perform__activity" ref={parentRef}>
         <hr className="perform__reference" />
-        {(audio) ? (
-          <AudioParser inputContext={audioEngine} audio={audio} parentRef={performRef} currentFrequency={currentFrequency}>
-            <AudioCanvas />
-          </AudioParser>
+        {(audio & analyser) ? (
+        <AudioCanvas audioData={audioData}
+          analyser={analyser}
+          parentRef={parentRef}
+          currentFrequency={currentFrequency}
+        />
         ) : null}
-        {(audio) ? <NoteName currentFrequency={currentFrequency} /> : null}
+        <NoteName currentFrequency={currentFrequency} />
       </section>
       <section className="perform__controls">
         <button onClick={playPreviousNote} className="perform__controls-button--switchnote">

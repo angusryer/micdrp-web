@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import AudioAnalyserEngine from '../../audio/AudioAnalyserEngine';
+import AudioOutputEngine from '../../audio/AudioOutputEngine';
 import { AudioCanvas } from '../';
 
 let audioDataArray;
 // let rafId;
 
-function AudioParser({ inputContext, audio, parentRef, currentFrequency }) {
+function AudioParser({ audio, parentRef, currentFrequency }) {
 
   const [audioData, setAudioData] = useState(new Float32Array(1024));
-  const [analyser, setAnalyser] = useState(new AudioAnalyserEngine(inputContext.context, audio))
+  const [analyser, setAnalyser] = useState(new AudioAnalyserEngine(audio))
 
   useEffect(() => {
-    console.log('111 => ', analyser)
     audioDataArray = analyser.initDataArray();
     setAudioData(audioDataArray); // async?
     // rafId = requestAnimationFrame(update);
@@ -34,7 +34,6 @@ function AudioParser({ inputContext, audio, parentRef, currentFrequency }) {
       analyser={analyser}
       parentRef={parentRef}
       currentFrequency={currentFrequency}
-      inputContext={inputContext}
     />
   )
 }

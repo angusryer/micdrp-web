@@ -1,11 +1,10 @@
 class AudioOutputEngine {
 
-    static context = () => {
-        new AudioContext()
-        this.initialize();
+    constructor() {
+        this.context = new AudioContext();
     }
 
-    initialize = () => {
+    initialize() {
         this.oscillator = this.context.createOscillator();
         this.oscillator.type = 'sine';
         this.gainNode = this.context.createGain();
@@ -13,31 +12,25 @@ class AudioOutputEngine {
         this.gainNode.connect(this.context.destination);
     }
 
-    playAudio = () => {
+    playAudio(freq) {
+        if (this.context.state === 'suspended') {
+            this.context.resume();
+        }
+        this.initialize();
+        this.oscillator.frequency.value = freq;
         this.gainNode.gain.exponentialRampToValueAtTime(
             0.075, this.context.currentTime
         )
         this.oscillator.start(this.context.currentTime);
     }
 
-    stopAudio = () => {
+    stopAudio() {
         this.gainNode.gain.linearRampToValueAtTime(
             0.00001, this.context.currentTime
         )
         this.oscillator.stop(this.context.currentTime);
         this.oscillator.disconnect();
     }
-
-    setFrequency = frequency => {
-        this.oscillator.frequency.value = frequency;
-    }
-
-    changeToNote = frequency => {
-        this.stopAudio();
-        this.setFrequency(frequency);
-        this.playAudio();
-    }
-
 }
 
-export default AudioOutputEngine;
+export default new AudioOutputEngine();
