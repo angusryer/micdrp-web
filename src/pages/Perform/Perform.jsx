@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 import { NavMinimal, NoteName, AudioCanvas } from '../../components';
 import AudioOutputEngine from '../../audio/AudioOutputEngine';
 import AudioAnalyserEngine from '../../audio/AudioAnalyserEngine';
@@ -79,7 +78,7 @@ function Perform({ user, userData }) {
       }
     }
 
-  }, [analyser])
+  }, [])
 
   const update = () => {
     analyser.getFloatTimeDomainData();
@@ -89,29 +88,31 @@ function Perform({ user, userData }) {
 
   return (
     <main className="perform">
-      <NavMinimal userVisible user={user} currentPage="perform" />
-      <section className="perform__activity" ref={parentRef}>
-        <hr className="perform__reference" />
-        {(audioStream & analyser) ? (
-        <AudioCanvas audioData={audioData}
-          analyser={analyser}
-          parentRef={parentRef}
-          currentFrequency={currentFrequency}
-        />
-        ) : null}
-        <NoteName currentFrequency={currentFrequency} />
-      </section>
-      <section className="perform__controls">
-        <button onClick={playPreviousNote} className="perform__controls-button--switchnote">
-          <img src={previousImage} alt="Previous note" className="perform__controls-button-image--switchnote" />
-        </button>
-        <button onClick={handleAudioState} className="perform__controls-button">
-          <img src={(audioState) ? pauseImage : playImage} alt="Play/Pause" className="perform__controls-button-image" />
-        </button>
-        <button onClick={playNextNote} className="perform__controls-button--switchnote">
-          <img src={nextImage} alt="Next note" className="perform__controls-button-image--switchnote" />
-        </button>
-      </section>
+      <div className="perform__container">
+        <NavMinimal userVisible user={user} currentPage="perform" />
+        <section className="perform__activity" ref={parentRef}>
+          <hr className="perform__reference" />
+          {(!!audioStream & !!analyser) ? (
+          <AudioCanvas audioData={audioData}
+            analyser={analyser}
+            parentRef={parentRef}
+            currentFrequency={currentFrequency}
+          />
+          ) : null}
+          <NoteName currentFrequency={currentFrequency} />
+        </section>
+        <section className="perform__controls">
+          <button onClick={playPreviousNote} className="perform__controls-button--switchnote">
+            <img src={previousImage} alt="Previous note" className="perform__controls-button-image--switchnote" />
+          </button>
+          <button onClick={handleAudioState} className="perform__controls-button">
+            <img src={(audioState) ? pauseImage : playImage} alt="Play/Pause" className="perform__controls-button-image" />
+          </button>
+          <button onClick={playNextNote} className="perform__controls-button--switchnote">
+            <img src={nextImage} alt="Next note" className="perform__controls-button-image--switchnote" />
+          </button>
+        </section>
+      </div>
     </main>
   )
 }

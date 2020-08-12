@@ -32,7 +32,7 @@ function App() {
         history.push(`/login`)
       }
     })
-  }, [])
+  }, [history])
 
   if (!user) {
     return (

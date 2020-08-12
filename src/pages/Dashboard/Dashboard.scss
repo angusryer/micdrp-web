@@ -1,9 +1,21 @@
 @import '../../styles/allutils';
 
 .dashboard {
-    background-color: $LIGHT;
-    max-width: 800px;
-    margin: 0 auto;
+    background-color: white;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__inner {
+        position: relative;
+        background-color: $LIGHT;
+        border-radius: 0.5rem;
+        width: 320px;
+        height:  600px;
+        margin: auto;
+    }
 
     &__progress-container {
         height: 10rem;

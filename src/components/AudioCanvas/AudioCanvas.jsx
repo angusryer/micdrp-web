@@ -47,10 +47,6 @@ function AudioCanvas({ analyser, audioData, parentRef, currentFrequency }) {
     }
   }
 
-  const stopOnPitchTimer = () => {
-
-  }
-
   const updateStates = async () => {
     startOnPitchTimer();
     analyser.getFloatTimeDomainData(input)
@@ -62,7 +58,7 @@ function AudioCanvas({ analyser, audioData, parentRef, currentFrequency }) {
     await setCanvasWidth(canvasWidthTemp);
   }
 
-  // Draw this instant's audioData buffer strem values to canvas, then loop
+  // Draw this instant's audioData buffer stream values to canvas, then loop
   let rId;
   const update = (canvas) => {
     const context = canvas.getContext('2d');
@@ -72,12 +68,13 @@ function AudioCanvas({ analyser, audioData, parentRef, currentFrequency }) {
     context.strokeStyle = '#DC9F6F'; //$ORANGE
     context.clearRect(0, 0, width, height);
     context.beginPath();
-    context.moveTo(0, height / 4);
+    context.moveTo(0, height / 2);
 
     let x = 0;
-    const sliceWidth = (width * 1) / audioData.length;
-    for (const item of audioData) {
-      const y = item * height;
+    const sliceWidth = width / audioData.length;
+    const multiplier = Math.pow(Math.max(...audioData), -1);
+    for (let i = 0; i < audioData.length; i++) {
+      let y = (audioData[i] * multiplier) * height;
       context.lineTo(x, y);
       x += sliceWidth;
     }
@@ -100,11 +97,11 @@ function AudioCanvas({ analyser, audioData, parentRef, currentFrequency }) {
     return () => {
       cancelAnimationFrame(rId)
     }
-  })
+  }, [userPitch])
 
   return (
     <div className="audiocanvas__container" style={{ transform: `translateY(${yPosition}px)` }}>
-      <canvas width={canvasWidth} height="60" className="audiocanvas__canvas" ref={canvasRef}><span>Canvas is not supported on this browser.</span></canvas>
+      <canvas width={canvasWidth} height="40" className="audiocanvas__canvas" ref={canvasRef}><span>Canvas is not supported on this browser.</span></canvas>
     </div>
   )
 }

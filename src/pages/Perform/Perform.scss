@@ -1,17 +1,28 @@
 @import '../../styles/allutils';
 
 .perform {
-    display: flex;
-    flex-flow: column nowrap;
-    height: 100vh;
     width: 100vw;
-    padding: auto;
-    background-color: $DARK;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__container {
+        position: relative;
+        display: flex;
+        flex-flow: column nowrap;
+        border-radius: 0.5rem;
+        margin: auto;
+        // padding: auto;
+        background-color: $DARK;
+        height: 600px;
+        width: 320px;
+    }
 
     &__reference {
         position: fixed;
         z-index: 1;
-        width: 100%;
+        width: 320px;
         border-top: 1px dashed $GREY;
     }
 

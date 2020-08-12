@@ -4,6 +4,7 @@
     &__container {
         display: flex;
         flex-flow: column nowrap;
+        border-radius: 0.5rem;
         padding: 1rem;
         min-height: 8rem;
         background-color: $LIGHT;

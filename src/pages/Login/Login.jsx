@@ -29,19 +29,21 @@ function Login({ setUser }) {
     }
 
     return (
-        <div className="login__container">
-            <div className="login__signin-group">
-                <div className="login__learn-container">
-                    <img src={questionMarkImage} alt="Learn more" onClick={() => history.push('/learn')} className="login__learn-icon" />
+        <main className="login">
+            <div className="login__container">
+                <div className="login__signin-group">
+                    <div className="login__learn-container">
+                        <img src={questionMarkImage} alt="Learn more" onClick={() => history.push('/learn')} className="login__learn-icon" />
+                    </div>
+                    <h1 className="login__title">micdrp</h1>
+                    <img src={micdrpLogo} alt="micdrp Logo" className="login__logo" />
+                    <button className="login__button" onClick={signIn}>
+                        <img src={googleEmblem} alt="Google emblem" className="login__button-img" />
+                        <span>Sign in with Google</span>
+                    </button>
                 </div>
-                <h1 className="login__title">micdrp</h1>
-                <img src={micdrpLogo} alt="micdrp Logo" className="login__logo" />
-                <button className="login__button" onClick={signIn}>
-                    <img src={googleEmblem} alt="Google emblem" className="login__button-img" />
-                    <span>Sign in with Google</span>
-                </button>
             </div>
-        </div>
+        </main>
     )
 }
 
