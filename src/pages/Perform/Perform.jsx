@@ -104,33 +104,31 @@ function Perform({ user, setUser }) {
     })
   }, [])
 
-  useEffect(() => {
-
-  }, [currentFrequency])
-
   return (
     <main className="perform">
-      <NavMinimal userVisible user={user} currentPage="perform" />
-      <section className="perform__activity" ref={performRef}>
-        <hr className="perform__reference" />
-        {(audio) ? <AudioParser inputContext={outputContext}
-          audio={audio}
-          parentRef={performRef}
-          currentFrequency={currentFrequency} />
-          : null}
-          {(audio) ? <NoteName currentFrequency={currentFrequency} /> : null}
-      </section>
-      <section className="perform__controls">
-        <button onClick={previousNote} className="perform__controls-button--switchnote">
-          <img src={previousImage} alt="Previous note" className="perform__controls-button-image--switchnote" />
-        </button>
-        <button onClick={handleAudioState} className="perform__controls-button">
-          <img src={(audioState) ? pauseImage : playImage} alt="Play/Pause" className="perform__controls-button-image" />
-        </button>
-        <button onClick={nextNote} className="perform__controls-button--switchnote">
-          <img src={nextImage} alt="Next note" className="perform__controls-button-image--switchnote" />
-        </button>
-      </section>
+      <div className="perform__container">
+        <NavMinimal userVisible user={user} currentPage="perform" />
+        <section className="perform__activity" ref={performRef}>
+          <hr className="perform__reference" />
+          {(audio) ? <AudioParser inputContext={outputContext}
+            audio={audio}
+            parentRef={performRef}
+            currentFrequency={currentFrequency} />
+            : null}
+            <NoteName currentFrequency={currentFrequency} />
+        </section>
+        <section className="perform__controls">
+          <button onClick={previousNote} className="perform__controls-button--switchnote">
+            <img src={previousImage} alt="Previous note" className="perform__controls-button-image--switchnote" />
+          </button>
+          <button onClick={handleAudioState} className="perform__controls-button">
+            <img src={(audioState) ? pauseImage : playImage} alt="Play/Pause" className="perform__controls-button-image" />
+          </button>
+          <button onClick={nextNote} className="perform__controls-button--switchnote">
+            <img src={nextImage} alt="Next note" className="perform__controls-button-image--switchnote" />
+          </button>
+        </section>
+      </div>
     </main>
   )
 }
