@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import firebase from '../../config/firebase';
+import firebase from '../../utilities/firebase';
 import { NavMinimal, AudioParser, NoteName } from '../../components';
 import './Perform.scss';
-import * as Notes from '../../config/notes';
+import * as Notes from '../../utilities/notes';
 import playImage from '../../assets/images/play-circle-outline.png';
 import pauseImage from '../../assets/images/pause-circle-outline.png';
 import previousImage from '../../assets/images/play-skip-back-outline.png';
@@ -42,7 +42,7 @@ const stopAudio = () => {
 
 
 // MAIN COMPONENT
-function Perform({ user, setUser }) {
+function Perform({ user, userData }) {
 
   const history = useHistory();
   const [audioState, setAudioState] = useState(false);
@@ -88,21 +88,6 @@ function Perform({ user, setUser }) {
       playAudio(currentFrequency);
     }
   }
-
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        const userData = {
-          uid: user.uid,
-          name: user.displayName,
-          avatar: user.photoURL,
-        }
-        setUser(userData)
-      } else {
-        history.push('/login');
-      }
-    })
-  }, [])
 
   return (
     <main className="perform">
