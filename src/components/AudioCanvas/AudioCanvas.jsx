@@ -13,7 +13,7 @@ function AudioCanvas({ analyser, audioData, parentRef, currentFrequency }) {
   const canvasRef = createRef();
   const [yPosition, setYPosition] = useState(0);
   const [canvasWidth, setCanvasWidth] = useState(0);
-  const [userPitch, setUserPitch] = useState(440);
+  const [userPitch, setUserPitch] = useState(0);
   const [onTimer, setOnTimer] = useState(0);
   const prevTimer = usePrevious(onTimer);
   const screenWidth = parentRef.current.offsetWidth;
@@ -71,10 +71,9 @@ function AudioCanvas({ analyser, audioData, parentRef, currentFrequency }) {
     context.moveTo(0, height / 2);
 
     let x = 0;
-    const sliceWidth = width / audioData.length;
-    const multiplier = Math.pow(Math.max(...audioData), -1);
+    const sliceWidth = (width * 1) / audioData.length;
     for (let i = 0; i < audioData.length; i++) {
-      let y = (audioData[i] * multiplier) * height;
+      let y = audioData[i] * height;
       context.lineTo(x, y);
       x += sliceWidth;
     }
@@ -94,10 +93,11 @@ function AudioCanvas({ analyser, audioData, parentRef, currentFrequency }) {
     input = new Float32Array(detector.inputLength);
     updateStates();
     update(canvasRef.current);
+
     return () => {
       cancelAnimationFrame(rId)
     }
-  }, [userPitch])
+  }, [])
 
   return (
     <div className="audiocanvas__container" style={{ transform: `translateY(${yPosition}px)` }}>

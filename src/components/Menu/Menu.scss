@@ -2,26 +2,24 @@
 
 .menu {
     position: absolute;
-    top: 2.5rem;
-    right: 1rem;
+    top: 0rem;
+    right: 0rem;
 
     &__container {
+        padding-top: 0.5rem;
         display: flex;
         flex-flow: column nowrap;
-        justify-content: center;
-
-        height: 6.5rem;
-        width: 5.5rem;
-        background-color: transparentize($color: $LIGHT, $amount: 0.25);
-        border: 0.5px solid $GREY;
-        border-radius: 0.3rem;
+        justify-content: flex-start;
+        height: 600px;
+        width: 8rem;
+        background-color: transparentize($color: $LIGHT, $amount: 0.2);
+        border-radius: 0.25rem;
     }
 
     &__list {
         display: flex;
         flex-flow: column nowrap;
         padding: 0;
-        align-self: center;
     }
 
     &__item {
@@ -32,8 +30,12 @@
         text-align: center;
         
         &:hover {
-            border-radius: 0.3rem;
+            border-radius: 0.25rem;
             animation: fadein 0.1s linear forwards;
+        }
+
+        & a {
+
         }
     }
 }

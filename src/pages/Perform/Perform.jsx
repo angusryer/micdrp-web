@@ -46,7 +46,7 @@ function Perform({ user, userData }) {
       video: false
     });
     setAudioStream(audioStream);
-    analyser = new AudioAnalyserEngine(audioStream); // Shouldn't be setting this here
+    analyser = new AudioAnalyserEngine(audioStream);
   }
 
   const stopMicrophone = () => {
@@ -55,7 +55,7 @@ function Perform({ user, userData }) {
   }
 
   const handleAudioState = async () => {
-    await (audioStream) ? stopMicrophone() : getMicrophone();
+    (audioStream) ?  stopMicrophone() : getMicrophone();
     setAudioState(!audioState);
     if (audioState) {
       AudioOutputEngine.stopAudio();
@@ -64,15 +64,24 @@ function Perform({ user, userData }) {
     }
   }
 
+  const update = () => {
+    analyser.getFloatTimeDomainData();
+    setAudioData(audioDataArray); // async?
+    rafId = requestAnimationFrame(update);
+    console.log(rafId)
+  }
+
   useEffect(() => {
-    if (analyser) { 
-      audioDataArray = analyser.initDataArray();
-      setAudioData(audioDataArray); // async?
-      rafId = requestAnimationFrame(update);
-    }
+      getMicrophone();
+      if (analyser) { 
+        audioDataArray = analyser.initDataArray();
+        setAudioData(audioDataArray); // async?
+        rafId = requestAnimationFrame(update);
+      }
 
     return () => {
       if (analyser) {
+      console.log("return effect test")
         cancelAnimationFrame(rafId);
         analyser.analyser.disconnect();
       }
@@ -80,19 +89,13 @@ function Perform({ user, userData }) {
 
   }, [])
 
-  const update = () => {
-    analyser.getFloatTimeDomainData();
-    setAudioData(audioDataArray); // async?
-    rafId = requestAnimationFrame(update);
-  }
-
   return (
     <main className="perform">
       <div className="perform__container">
         <NavMinimal userVisible user={user} currentPage="perform" />
         <section className="perform__activity" ref={parentRef}>
           <hr className="perform__reference" />
-          {(!!audioStream & !!analyser) ? (
+          {(audioStream && analyser) ? (
           <AudioCanvas audioData={audioData}
             analyser={analyser}
             parentRef={parentRef}
