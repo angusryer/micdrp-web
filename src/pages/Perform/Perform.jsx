@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import firebase from '../../config/firebase';
+import firebase from '../../utilities/firebase';
 import { NavMinimal, AudioParser, NoteName } from '../../components';
 import './Perform.scss';
-import * as Notes from '../../config/notes';
+import * as Notes from '../../utilities/notes';
 import playImage from '../../assets/images/play-circle-outline.png';
 import pauseImage from '../../assets/images/pause-circle-outline.png';
 import previousImage from '../../assets/images/play-skip-back-outline.png';
@@ -42,26 +42,40 @@ const stopAudio = () => {
 
 
 // MAIN COMPONENT
-function Perform({ user, setUser }) {
+function Perform({ user, userData }) {
 
   const history = useHistory();
   const [audioState, setAudioState] = useState(false);
   const [currentFrequency, setCurrentFrequency] = useState(220.00);
   const [audio, setAudio] = useState(null);
   const performRef = useRef();
+  const [randomStep, setRandomStep] = useState(0);
 
   const nextNote = async () => {
     const nextNote = Notes.getRelativeNote(1, currentFrequency).freq
     await setCurrentFrequency(Notes.getRelativeNote(1, currentFrequency).freq)
-    stopAudio();
-    playAudio(nextNote);
+    if (audioState) {
+      stopAudio();
+      playAudio(nextNote);
+    }
   }
 
   const previousNote = async () => {
     const previousNote = Notes.getRelativeNote(-1, currentFrequency).freq
     await setCurrentFrequency(previousNote)
-    stopAudio();
-    playAudio(previousNote)
+    if (audioState) {
+      stopAudio();
+      playAudio(previousNote)
+    }
+  }
+
+  const randomNote = async () => {
+    const randomNote = Notes.getRelativeNote(randomStep, currentFrequency).freq
+    await setCurrentFrequency(randomNote)
+    if (audioState) {
+      stopAudio();
+      playAudio(randomNote);
+    }
   }
 
   const getMicrophone = async () => {
@@ -89,21 +103,6 @@ function Perform({ user, setUser }) {
     }
   }
 
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        const userData = {
-          uid: user.uid,
-          name: user.displayName,
-          avatar: user.photoURL,
-        }
-        setUser(userData)
-      } else {
-        history.push('/login');
-      }
-    })
-  }, [])
-
   return (
     <main className="perform">
       <div className="perform__container">
@@ -113,7 +112,8 @@ function Perform({ user, setUser }) {
           {(audio) ? <AudioParser inputContext={outputContext}
             audio={audio}
             parentRef={performRef}
-            currentFrequency={currentFrequency} />
+            currentFrequency={currentFrequency}
+            getRandomStep={setRandomStep} />
             : null}
             <NoteName currentFrequency={currentFrequency} />
         </section>

@@ -1,0 +1,31 @@
+@import './variables';
+
+@keyframes fadein {
+    0% {
+        width: 6rem;
+        background-color: $GREY;
+        font-weight: 400;
+    }
+
+    33%   {
+        background-color: $ORANGE;
+        font-weight: 500;
+        width: 7rem;
+    }
+
+    100%   {
+        background-color: $ORANGE;
+        font-weight: 600;
+        width: 8rem;
+    }
+}
+
+@keyframes orangeHighlight {
+    0% {
+        background-color: transparent;
+    }
+
+    100%   {
+        background-color: $ORANGE;
+    }
+}

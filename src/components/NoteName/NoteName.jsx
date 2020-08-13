@@ -1,6 +1,6 @@
 import React from 'react'
 import './NoteName.scss';
-import * as Notes from '../../config/notes';
+import * as Notes from '../../utilities/notes';
 
 export default function NoteName({ currentFrequency, addClassDiv, addClassText }) {
 

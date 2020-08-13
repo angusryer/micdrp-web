@@ -7,10 +7,6 @@
     font-weight: 400;
     color: $DARK;
 
-    & > body {
-        background-color: $LIGHT;
-    }
-
     & > a {
         text-decoration-line: none;
 
@@ -18,6 +14,10 @@
             color: $DARK;
         }
     }
+}
+
+body {
+    background-color: white;
 }
 
 ::after {
@@ -28,4 +28,10 @@
 ::before {
     margin: 0;
     box-sizing: border-box;
+}
+
+.loading__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
