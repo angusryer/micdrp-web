@@ -7,9 +7,10 @@ import './AudioCanvas.scss';
 let detector;
 let input;
 
-function AudioCanvas({ inputContext, analyser, audioData, parentRef, currentFrequency }) {
+function AudioCanvas({ inputContext, analyser, audioData, parentRef, currentFrequency, getRandomStep }) {
 
   const canvasRef = createRef();
+  const [inTune, setInTune] = useState(false);
   const [yPosition, setYPosition] = useState(0);
   const [canvasWidth, setCanvasWidth] = useState(0);
   const [userPitch, setUserPitch] = useState(440);
@@ -34,20 +35,27 @@ function AudioCanvas({ inputContext, analyser, audioData, parentRef, currentFreq
     }
   }
 
-  const startOnPitchTimer = () => {
-    if (userPitch > (currentFrequency * 0.98) && userPitch < (currentFrequency * 1.02)) {
-      // user pitch is good!
-      setOnTimer(inputContext.currentTime);
-      setTimeout(() => {
-        if (onTimer === prevTimer) {
-          console.log("You're singing in tune!");
-        }
-      }, 3000)
-    }
+  const getRandomInt = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  const stopOnPitchTimer = () => {
-
+  const startOnPitchTimer = () => {
+      if (userPitch > (currentFrequency * 0.97) && userPitch < (currentFrequency * 1.03)) {
+        // user pitch is good!
+        setOnTimer(inputContext.currentTime);
+        setTimeout(() => {
+          if (onTimer === prevTimer) {
+            if (!inTune) {
+                setInTune(true);
+                getRandomStep(getRandomInt(-12, 12));
+              } else {
+                setInTune(false);
+              }
+            }
+        }, 3000)
+      }
   }
 
   const updateStates = async () => {
@@ -102,9 +110,10 @@ function AudioCanvas({ inputContext, analyser, audioData, parentRef, currentFreq
   })
 
   return (
-    <div className="audiocanvas__container" style={{ transform: `translateY(${yPosition}px)` }}>
-      <canvas width={canvasWidth} height="60" className="audiocanvas__canvas" ref={canvasRef}><span>Canvas is not supported on this browser.</span></canvas>
-    </div>
+      <div className="audiocanvas__container" style={{ transform: `translateY(${yPosition}px)` }}>
+        {(inTune) ? <div className="intune">GREAT!</div> : null}
+        <canvas width={canvasWidth} height="25" className="audiocanvas__canvas" ref={canvasRef}><span>Canvas is not supported on this browser.</span></canvas>
+      </div>
   )
 }
 

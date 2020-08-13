@@ -5,7 +5,7 @@ let dataArray;
 let source;
 let rafId;
 
-function AudioParser({ inputContext, audio, parentRef, currentFrequency }) {
+function AudioParser({ inputContext, audio, parentRef, currentFrequency,  getRandomStep }) {
 
   const [audioData, setAudioData] = useState(new Float32Array(0));
   const [analyser, setAnalyser] = useState(new AnalyserNode(inputContext))
@@ -41,6 +41,7 @@ function AudioParser({ inputContext, audio, parentRef, currentFrequency }) {
       parentRef={parentRef}
       currentFrequency={currentFrequency}
       inputContext={inputContext}
+      getRandomStep={getRandomStep}
     />
   )
 }

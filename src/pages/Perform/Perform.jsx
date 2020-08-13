@@ -49,19 +49,33 @@ function Perform({ user, userData }) {
   const [currentFrequency, setCurrentFrequency] = useState(220.00);
   const [audio, setAudio] = useState(null);
   const performRef = useRef();
+  const [randomStep, setRandomStep] = useState(0);
 
   const nextNote = async () => {
     const nextNote = Notes.getRelativeNote(1, currentFrequency).freq
     await setCurrentFrequency(Notes.getRelativeNote(1, currentFrequency).freq)
-    stopAudio();
-    playAudio(nextNote);
+    if (audioState) {
+      stopAudio();
+      playAudio(nextNote);
+    }
   }
 
   const previousNote = async () => {
     const previousNote = Notes.getRelativeNote(-1, currentFrequency).freq
     await setCurrentFrequency(previousNote)
-    stopAudio();
-    playAudio(previousNote)
+    if (audioState) {
+      stopAudio();
+      playAudio(previousNote)
+    }
+  }
+
+  const randomNote = async () => {
+    const randomNote = Notes.getRelativeNote(randomStep, currentFrequency).freq
+    await setCurrentFrequency(randomNote)
+    if (audioState) {
+      stopAudio();
+      playAudio(randomNote);
+    }
   }
 
   const getMicrophone = async () => {
@@ -98,7 +112,8 @@ function Perform({ user, userData }) {
           {(audio) ? <AudioParser inputContext={outputContext}
             audio={audio}
             parentRef={performRef}
-            currentFrequency={currentFrequency} />
+            currentFrequency={currentFrequency}
+            getRandomStep={setRandomStep} />
             : null}
             <NoteName currentFrequency={currentFrequency} />
         </section>
