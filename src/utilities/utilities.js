@@ -37,5 +37,5 @@ export const createCookie = (cookieName, cookieValue, expirationInDays, domainPa
 		date.setTime(date.getTime() + (expirationInDays * 24 * 60 * 60 * 1000));
 		cookieExpiration = "; expires=" + date.toGMTString();
 	}
-	document.cookie = `${cookieName}=${cookieValue}${cookieExpiration}; path=${(!domainPath) ? "/" : domainPath}`;
+	document.cookie = `${cookieName}=${cookieValue}${cookieExpiration}; path=${(!domainPath) ? "/" : domainPath}; Secure SameSite=None`;
 }
